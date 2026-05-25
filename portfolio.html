@@ -1,0 +1,2385 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Ismael Cardoso Martins — Full Stack Developer</title>
+<meta id="meta-description" name="description" content="Full Stack Developer specializing in geospatial systems, mobile ecosystems and clean backend architecture. .NET · Vue 3 · Flutter" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  /* ---------- tokens ---------- */
+  :root {
+    --bg: #0D0D0D;
+    --bg-1: #131313;
+    --bg-2: #1A1A1A;
+    --line: #1F1F1F;
+    --line-2: #2A2A2A;
+    --fg: #F2F2F2;
+    --fg-dim: #A8A8A8;
+    --fg-mute: #6B6B6B;
+    --accent: #2341DC;
+    --accent-soft: rgba(35, 65, 220, 0.12);
+    --accent-line: rgba(35, 65, 220, 0.35);
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  /* subtle grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.012) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* ---------- header ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(13, 13, 13, 0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand .dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent);
+    border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .nav-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    color: var(--fg-dim);
+    border: 1px solid var(--line-2);
+    transition: all .15s ease;
+  }
+  .nav-icon:hover { color: var(--fg); border-color: var(--fg-mute); background: var(--bg-1); }
+  .nav-icon svg { width: 14px; height: 14px; }
+  .nav-burger {
+    display: none;
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: var(--fg-dim);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+  }
+  .nav-burger svg { width: 16px; height: 16px; }
+  .nav-links {
+    display: flex;
+    gap: 24px;
+    font-size: 13px;
+    color: var(--fg-dim);
+  }
+  .nav-links a { transition: color .15s ease; }
+  .nav-links a:hover { color: var(--fg); }
+  .nav-links a .num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    margin-right: 6px;
+  }
+
+  /* lang toggle */
+  .lang {
+    display: flex;
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .lang button {
+    background: transparent;
+    border: none;
+    color: var(--fg-mute);
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all .15s ease;
+    font-family: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    letter-spacing: 0.04em;
+  }
+  .lang button:hover { color: var(--fg-dim); }
+  .lang button.active {
+    background: var(--accent);
+    color: #fff;
+  }
+
+  /* ---------- hero ---------- */
+  .hero {
+    padding: 120px 0 100px;
+    border-bottom: 1px solid var(--line);
+  }
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    letter-spacing: 0.02em;
+  }
+  .eyebrow::before {
+    content: '';
+    width: 24px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 56px;
+    align-items: center;
+  }
+  .hero-photo {
+    position: relative;
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+  }
+  .hero-photo::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(35,65,220,0.45), transparent 70%);
+    filter: blur(18px);
+    z-index: 0;
+  }
+  .hero-photo img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 1px solid var(--accent-line);
+    box-shadow:
+      0 0 0 4px rgba(35,65,220,0.08),
+      0 20px 50px -15px rgba(35,65,220,0.5);
+  }
+  .hero-photo::after {
+    content: '';
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #2ecc71;
+    border: 3px solid var(--bg);
+    z-index: 2;
+    box-shadow: 0 0 10px rgba(46, 204, 113, 0.6);
+  }
+  @media (max-width: 720px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    .hero-photo { width: 140px; height: 140px; order: -1; }
+  }
+  .hero h1 {
+    font-family: var(--sans);
+    font-size: clamp(40px, 6.4vw, 72px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.02;
+    margin: 0 0 24px;
+  }
+  .hero h1 .accent { color: var(--accent); }
+  .hero .role {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--fg-dim);
+    margin-bottom: 40px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+  .hero .role .sep { color: var(--fg-mute); }
+  .hero .role .tag {
+    color: var(--fg);
+  }
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-family: var(--sans);
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: -0.005em;
+    cursor: pointer;
+    transition: all .15s ease;
+    border: 1px solid transparent;
+    text-decoration: none;
+    line-height: 1;
+  }
+  .btn svg { width: 14px; height: 14px; }
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .btn-primary:hover {
+    background: #1a33b8;
+    border-color: #1a33b8;
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--fg);
+    border-color: var(--line-2);
+  }
+  .btn-ghost:hover {
+    border-color: var(--fg-mute);
+    background: var(--bg-1);
+  }
+
+  /* status row under hero */
+  .status-row {
+    margin-top: 56px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 32px 48px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.02em;
+  }
+  .status-row > div { display: flex; flex-direction: column; gap: 6px; }
+  .status-row .label { color: var(--fg-mute); }
+  .status-row .value { color: var(--fg); font-size: 13px; }
+  .status-row .value.live { color: var(--accent); display: flex; align-items: center; gap: 8px; }
+  .status-row .value.live::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ---------- section ---------- */
+  section {
+    padding: 100px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 56px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .section-rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+
+  /* about */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+  }
+  .about-text p {
+    font-size: 18px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0 0 18px;
+    text-wrap: pretty;
+  }
+  .about-text p strong { color: var(--fg); font-weight: 500; }
+  .about-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  .meta-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 24px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .meta-row:first-child { border-top: 1px solid var(--line); }
+  .meta-row .k { color: var(--fg-mute); }
+  .meta-row .v { color: var(--fg); }
+
+  /* projects */
+  .projects { display: flex; flex-direction: column; gap: 24px; }
+  .project {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    transition: border-color .2s ease;
+  }
+  .project:hover { border-color: var(--line-2); }
+
+  .project-visual {
+    position: relative;
+    background: var(--bg-2);
+    border-right: 1px solid var(--line);
+    min-height: 380px;
+    overflow: hidden;
+  }
+  .project-visual .label {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--fg-mute);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    z-index: 2;
+  }
+
+  /* G-SEG visual: operational GIS dashboard */
+  .gseg-visual {
+    position: absolute;
+    inset: 0;
+    background: #0a0d12;
+    overflow: hidden;
+  }
+  .gseg-map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+  /* heatmap layer */
+  .gseg-heatmap {
+    position: absolute;
+    inset: 0;
+    mix-blend-mode: screen;
+    pointer-events: none;
+    filter: blur(2px);
+  }
+  .gseg-blob {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .gseg-blob.h1 {
+    left: 42%; top: 48%; width: 240px; height: 240px;
+    background: radial-gradient(circle,
+      rgba(231,76,60,0.78) 0%,
+      rgba(231,118,60,0.55) 25%,
+      rgba(243,156,18,0.30) 45%,
+      transparent 70%);
+  }
+  .gseg-blob.h2 {
+    left: 62%; top: 38%; width: 180px; height: 180px;
+    background: radial-gradient(circle,
+      rgba(243,156,18,0.55) 0%,
+      rgba(243,196,18,0.30) 35%,
+      transparent 70%);
+  }
+  .gseg-blob.h3 {
+    left: 30%; top: 30%; width: 140px; height: 140px;
+    background: radial-gradient(circle,
+      rgba(231,76,60,0.55) 0%,
+      rgba(243,156,18,0.25) 40%,
+      transparent 72%);
+  }
+  .gseg-blob.h4 {
+    left: 56%; top: 68%; width: 160px; height: 160px;
+    background: radial-gradient(circle,
+      rgba(35,100,220,0.55) 0%,
+      rgba(35,65,220,0.25) 45%,
+      transparent 75%);
+  }
+  .gseg-blob.h5 {
+    left: 22%; top: 72%; width: 110px; height: 110px;
+    background: radial-gradient(circle,
+      rgba(35,65,220,0.45) 0%,
+      transparent 72%);
+  }
+
+  /* cluster pins with count badges */
+  .gseg-cluster {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: rgba(231,76,60,0.18);
+    border: 1px solid rgba(231,76,60,0.7);
+    box-shadow:
+      0 0 0 4px rgba(231,76,60,0.10),
+      0 0 12px rgba(231,76,60,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 600;
+    color: #fff;
+    letter-spacing: -0.02em;
+  }
+  .gseg-cluster.sev-low {
+    background: rgba(35,65,220,0.18);
+    border-color: rgba(35,65,220,0.7);
+    box-shadow:
+      0 0 0 4px rgba(35,65,220,0.10),
+      0 0 12px rgba(35,65,220,0.45);
+  }
+  .gseg-cluster.c1 { left: 42%; top: 48%; width: 32px; height: 32px; font-size: 11px; }
+  .gseg-cluster.c2 { left: 62%; top: 38%; }
+  .gseg-cluster.c3 { left: 26%; top: 70%; width: 22px; height: 22px; font-size: 9px; }
+  .gseg-cluster.c4 { left: 30%; top: 28%; }
+  .gseg-cluster.c5 { left: 58%; top: 68%; width: 22px; height: 22px; font-size: 9px; }
+
+  /* reticle smaller + repositioned to hot zone */
+  .gseg-reticle {
+    position: absolute;
+    left: 55%; top: 52%;
+    transform: translate(-50%, -50%);
+    width: 56px; height: 56px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .gseg-reticle-ring {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    border: 1px dashed rgba(35,65,220,0.55);
+  }
+  .gseg-reticle-ring.r2 {
+    inset: -16px;
+    border-style: solid;
+    border-color: rgba(35,65,220,0.15);
+  }
+  .gseg-reticle-cross::before,
+  .gseg-reticle-cross::after {
+    content: '';
+    position: absolute;
+    background: rgba(35,65,220,0.5);
+  }
+  .gseg-reticle-cross::before { left: 50%; top: -10px; width: 1px; height: 76px; transform: translateX(-50%); }
+  .gseg-reticle-cross::after  { top: 50%; left: -10px; height: 1px; width: 76px; transform: translateY(-50%); }
+  .gseg-reticle-label {
+    position: absolute;
+    top: -22px; left: 50%; transform: translateX(-50%);
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-dim);
+    background: rgba(13,13,13,0.85);
+    border: 1px solid var(--line-2);
+    padding: 2px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+    letter-spacing: 0.02em;
+  }
+
+  /* HUD: top-right pill */
+  .gseg-hud-tr {
+    position: absolute;
+    top: 16px; right: 16px;
+    z-index: 3;
+    display: flex; flex-direction: column; gap: 10px;
+    align-items: flex-end;
+  }
+  .gseg-hud-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: rgba(13,13,13,0.78);
+    border: 1px solid var(--line-2);
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-dim);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    backdrop-filter: blur(6px);
+  }
+  .gseg-pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: #4ADE80;
+    box-shadow: 0 0 0 2px rgba(74,222,128,0.18), 0 0 6px rgba(74,222,128,0.6);
+    animation: gseg-pulse 2s ease-in-out infinite;
+  }
+  @keyframes gseg-pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+
+  /* layers panel */
+  .gseg-layers {
+    background: rgba(13,13,13,0.85);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    padding: 8px 10px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-dim);
+    letter-spacing: 0.04em;
+    backdrop-filter: blur(6px);
+    min-width: 110px;
+  }
+  .gseg-layers-title {
+    text-transform: uppercase;
+    color: var(--fg-mute);
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid var(--line);
+  }
+  .gseg-layer {
+    display: flex; align-items: center; gap: 7px;
+    padding: 3px 0;
+    text-transform: uppercase;
+    opacity: 0.5;
+  }
+  .gseg-layer.on { opacity: 1; color: var(--fg); }
+  .gseg-layer .sw {
+    width: 7px; height: 7px;
+    border-radius: 1px;
+    background: var(--line-2);
+    flex-shrink: 0;
+  }
+  .gseg-layer.on .sw { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+
+  /* incidents feed (right panel) */
+  .gseg-feed {
+    position: absolute;
+    right: 16px;
+    bottom: 64px;
+    width: 168px;
+    background: rgba(13,13,13,0.88);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    padding: 9px 10px 7px;
+    backdrop-filter: blur(6px);
+    z-index: 3;
+  }
+  .gseg-feed-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    padding-bottom: 6px;
+    margin-bottom: 5px;
+    border-bottom: 1px solid var(--line);
+  }
+  .gseg-feed-head span:first-child { color: var(--fg-dim); }
+  .gseg-feed-count { color: var(--accent); }
+  .gseg-feed-list { display: flex; flex-direction: column; gap: 3px; }
+  .gseg-feed-row {
+    display: grid;
+    grid-template-columns: 32px 36px 1fr 8px;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-dim);
+    padding: 2px 0;
+  }
+  .gseg-feed-time { color: var(--fg-mute); }
+  .gseg-feed-code { color: var(--fg); font-weight: 500; }
+  .gseg-feed-loc { color: var(--fg-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .gseg-feed-sev { width: 6px; height: 6px; border-radius: 50%; justify-self: end; }
+  .gseg-feed-sev.sev-high { background: #E74C3C; box-shadow: 0 0 4px rgba(231,76,60,0.7); }
+  .gseg-feed-sev.sev-med  { background: #F39C12; box-shadow: 0 0 4px rgba(243,156,18,0.7); }
+  .gseg-feed-sev.sev-low  { background: var(--accent); box-shadow: 0 0 4px var(--accent); }
+
+  /* bottom readout */
+  .gseg-readout {
+    position: absolute;
+    bottom: 16px;
+    left: 16px;
+    right: 16px;
+    background: rgba(13,13,13,0.88);
+    border: 1px solid var(--line-2);
+    border-radius: 4px;
+    padding: 9px 14px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--fg-dim);
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    backdrop-filter: blur(6px);
+    z-index: 2;
+  }
+  .gseg-readout span { display: inline-flex; align-items: baseline; gap: 6px; white-space: nowrap; }
+  .gseg-readout span b {
+    color: var(--fg-mute);
+    font-weight: 500;
+    text-transform: uppercase;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 640px) {
+    .gseg-feed { display: none; }
+  }
+
+  /* Triunfo visual: app home screen */
+  .tri-visual {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:
+      radial-gradient(circle at 50% 100%, rgba(191,231,64,0.08) 0%, transparent 65%),
+      var(--bg-2);
+  }
+  .tri-phone {
+    --lime: #BFE740;
+    --lime-dim: #95B82B;
+    --tri-bg: #0c0c0c;
+    --tri-card: #1a1a1a;
+    --tri-card-2: #232323;
+    --tri-text: #ECECEC;
+    --tri-mute: #8A8A8A;
+    width: 224px;
+    height: 446px;
+    background: var(--tri-bg);
+    border: 1px solid #2a2a2a;
+    border-radius: 26px;
+    padding: 22px 12px 8px;
+    position: relative;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-family: var(--sans);
+    color: var(--tri-text);
+    overflow: hidden;
+  }
+  .tri-phone::before {
+    content: '';
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 56px;
+    height: 4px;
+    border-radius: 2px;
+    background: #1f1f1f;
+  }
+  .tri-greet {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2px;
+  }
+  .tri-greet-left { display: flex; align-items: center; gap: 8px; }
+  .tri-avatar {
+    width: 28px; height: 28px;
+    border-radius: 50%;
+    background: #2a2a2a;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .tri-avatar svg { width: 16px; height: 16px; color: #5a5a5a; }
+  .tri-greet-text { display: flex; flex-direction: column; line-height: 1.15; }
+  .tri-greet-l1 { font-size: 8px; color: var(--tri-mute); }
+  .tri-greet-l2 { font-size: 10px; font-weight: 600; color: var(--lime); letter-spacing: -0.01em; }
+  .tri-greet-icons { display: flex; gap: 6px; align-items: center; }
+  .tri-greet-icons .ic {
+    width: 24px; height: 24px;
+    border-radius: 5px;
+    background: var(--tri-card);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--tri-text);
+  }
+  .tri-greet-icons .ic.lime { background: var(--lime); color: #000; }
+  .tri-greet-icons .ic svg { width: 12px; height: 12px; }
+  .tri-cta {
+    background: linear-gradient(135deg, var(--lime) 0%, #A8D131 100%);
+    color: #0a0a0a;
+    border-radius: 14px;
+    padding: 11px 12px 10px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .tri-cta-tag {
+    display: flex; align-items: center; gap: 4px;
+    font-size: 8px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+  }
+  .tri-cta-tag svg { width: 9px; height: 9px; }
+  .tri-cta-title { font-size: 16px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; margin-top: 1px; }
+  .tri-cta-bottom { display: flex; justify-content: space-between; align-items: flex-end; margin-top: 4px; }
+  .tri-cta-meta { display: flex; flex-direction: column; line-height: 1.25; font-size: 8.5px; }
+  .tri-cta-meta .m1 { font-weight: 600; }
+  .tri-cta-meta .m2 { opacity: 0.65; }
+  .tri-cta-btn {
+    background: #0a0a0a;
+    color: var(--lime);
+    font-size: 8.5px;
+    font-weight: 600;
+    padding: 5px 9px;
+    border-radius: 6px;
+    display: inline-flex; align-items: center; gap: 4px;
+  }
+  .tri-week {
+    background: var(--tri-card);
+    border-radius: 12px;
+    padding: 8px 9px;
+    display: flex; flex-direction: column; gap: 6px;
+    border: 1px solid #1f1f1f;
+  }
+  .tri-week-note {
+    font-size: 7.5px;
+    color: var(--lime);
+    font-weight: 500;
+  }
+  .tri-week-row { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0; }
+  .tri-week-day { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+  .tri-week-day .lbl { font-size: 6.5px; color: var(--tri-mute); text-transform: lowercase; }
+  .tri-week-day .num {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #232323;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 8px;
+    font-weight: 500;
+    color: var(--tri-text);
+  }
+  .tri-week-day.active .num {
+    background: transparent;
+    border: 1.5px solid var(--lime);
+    color: var(--lime);
+  }
+  .tri-stitle { font-size: 9.5px; font-weight: 600; color: var(--tri-text); padding: 1px 2px 0; letter-spacing: -0.01em; }
+  .tri-period {
+    background: linear-gradient(135deg, var(--lime) 0%, #A8D131 100%);
+    color: #0a0a0a;
+    border-radius: 12px;
+    padding: 8px 11px 9px;
+    display: flex; flex-direction: column; gap: 5px;
+    position: relative;
+  }
+  .tri-period-head { display: flex; justify-content: space-between; align-items: flex-start; }
+  .tri-period-l { display: flex; flex-direction: column; line-height: 1.2; }
+  .tri-period-l .t { font-size: 10.5px; font-weight: 700; letter-spacing: -0.01em; }
+  .tri-period-l .s { font-size: 8px; opacity: 0.7; }
+  .tri-period-arrow { font-size: 14px; line-height: 1; font-weight: 300; }
+  .tri-period-dots { display: flex; gap: 4px; padding-top: 2px; }
+  .tri-period-dots span {
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: rgba(0,0,0,0.18);
+  }
+  .tri-meta {
+    background: var(--tri-card);
+    border: 1px solid #1f1f1f;
+    border-radius: 12px;
+    padding: 8px 10px 9px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .tri-meta-row { display: flex; justify-content: space-between; align-items: center; font-size: 9px; }
+  .tri-meta-row .l { display: inline-flex; align-items: center; gap: 4px; font-weight: 600; }
+  .tri-meta-row .l svg { width: 9px; height: 9px; color: var(--lime); }
+  .tri-meta-row .r { color: var(--tri-mute); font-family: var(--mono); font-size: 8.5px; }
+  .tri-meta-bar {
+    height: 3px;
+    background: #2a2a2a;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .tri-meta-bar > i { display: block; height: 100%; width: 0%; background: var(--lime); }
+  .tri-meta-note { font-size: 7.5px; color: var(--tri-mute); }
+  .tri-nav {
+    margin-top: auto;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    padding: 6px 2px 2px;
+    border-top: 1px solid #1a1a1a;
+  }
+  .tri-nav-item {
+    display: flex; flex-direction: column; align-items: center; gap: 2px;
+    font-size: 7px;
+    color: var(--tri-mute);
+  }
+  .tri-nav-item svg { width: 13px; height: 13px; }
+  .tri-nav-item.active { color: var(--lime); }
+
+  .project-body {
+    padding: 36px 36px 32px;
+    display: flex;
+    flex-direction: column;
+  }
+  .project-meta {
+    display: flex;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    margin-bottom: 14px;
+    letter-spacing: 0.02em;
+  }
+  .project-meta .badge {
+    color: var(--accent);
+    border: 1px solid var(--accent-line);
+    padding: 2px 8px;
+    border-radius: 3px;
+    background: var(--accent-soft);
+  }
+  .project h3 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 0 0 8px;
+  }
+  .project .tagline {
+    font-size: 14px;
+    color: var(--fg-dim);
+    margin-bottom: 20px;
+  }
+  .project p.desc {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--fg-dim);
+    margin: 0 0 24px;
+    text-wrap: pretty;
+  }
+  .stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 28px;
+  }
+  .stack span {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-dim);
+    background: var(--bg-2);
+    border: 1px solid var(--line-2);
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  .feature-list {
+    margin: 0 0 28px;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .feature-list li {
+    font-size: 13px;
+    color: var(--fg-dim);
+    padding-left: 18px;
+    position: relative;
+  }
+  .feature-list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 9px;
+    width: 6px;
+    height: 1px;
+    background: var(--accent);
+  }
+  .project-links {
+    margin-top: auto;
+    display: flex;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+  }
+  .project-links a {
+    color: var(--fg);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding-bottom: 2px;
+    border-bottom: 1px solid var(--line-2);
+    transition: border-color .15s ease, color .15s ease;
+  }
+  .project-links a:hover { border-color: var(--accent); color: var(--accent); }
+  .project-links a svg { width: 12px; height: 12px; }
+
+  /* skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .skill-cat {
+    background: var(--bg);
+    padding: 24px;
+  }
+  .skill-cat h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    margin: 0 0 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .skill-cat ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .skill-cat li {
+    font-size: 13px;
+    color: var(--fg);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+  }
+  .skill-cat li .lvl {
+    display: flex;
+    gap: 3px;
+  }
+  .skill-cat li .lvl i {
+    width: 5px;
+    height: 5px;
+    background: var(--line-2);
+    border-radius: 50%;
+  }
+  .skill-cat li .lvl i.on { background: var(--accent); }
+
+  /* contact */
+  .contact-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 64px;
+    align-items: start;
+  }
+  .contact-lead h2 {
+    font-size: clamp(32px, 4.5vw, 48px);
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin: 0 0 20px;
+  }
+  .contact-lead p {
+    font-size: 15px;
+    color: var(--fg-dim);
+    margin: 0 0 32px;
+    max-width: 420px;
+    text-wrap: pretty;
+  }
+  .contact-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border-top: 1px solid var(--line);
+  }
+  .contact-list a {
+    display: grid;
+    grid-template-columns: 24px 1fr auto;
+    gap: 16px;
+    align-items: center;
+    padding: 18px 0;
+    border-bottom: 1px solid var(--line);
+    transition: padding .2s ease;
+  }
+  .contact-list a:hover { padding-left: 8px; }
+  .contact-list a:hover .ch-arrow { color: var(--accent); transform: translateX(4px); }
+  .contact-list .ch-icon {
+    color: var(--fg-mute);
+    width: 16px;
+    height: 16px;
+  }
+  .contact-list .ch-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+  }
+  .contact-list .ch-value {
+    font-size: 15px;
+    color: var(--fg);
+    font-weight: 500;
+  }
+  .contact-list .ch-arrow {
+    color: var(--fg-mute);
+    font-family: var(--mono);
+    font-size: 14px;
+    transition: all .2s ease;
+  }
+
+  /* footer */
+  footer {
+    padding: 32px 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+    letter-spacing: 0.02em;
+  }
+  footer a:hover { color: var(--fg-dim); }
+
+  /* timeline */
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .tl-item {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 32px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+    position: relative;
+  }
+  .tl-item:last-child { border-bottom: 1px solid var(--line); }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: 180px;
+    top: 36px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 3px rgba(35,65,220,0.15);
+    transform: translateX(-50%);
+  }
+  .tl-period {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--mono);
+  }
+  .tl-year {
+    font-size: 28px;
+    font-weight: 500;
+    color: var(--fg);
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .tl-range {
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.02em;
+  }
+  .tl-body {
+    padding-left: 32px;
+    border-left: 1px solid var(--line);
+  }
+  .tl-head {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .tl-role {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin: 0;
+    color: var(--fg);
+  }
+  .tl-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    padding: 3px 8px;
+    border-radius: 3px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .tl-company {
+    font-size: 15px;
+    color: var(--fg-dim);
+    margin-bottom: 4px;
+  }
+  .tl-loc {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.02em;
+  }
+  @media (max-width: 720px) {
+    .tl-item { grid-template-columns: 1fr; gap: 12px; }
+    .tl-item::before { display: none; }
+    .tl-body { padding-left: 0; border-left: none; }
+  }
+
+  /* timeline expand */
+  .tl-toggle {
+    margin-top: 14px;
+    background: transparent;
+    border: 1px solid var(--line-2);
+    color: var(--fg-dim);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 7px 12px;
+    border-radius: 3px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .tl-toggle:hover { color: var(--fg); border-color: var(--accent-line); background: var(--accent-soft); }
+  .tl-toggle .tl-caret {
+    width: 8px;
+    height: 8px;
+    border-right: 1px solid currentColor;
+    border-bottom: 1px solid currentColor;
+    transform: rotate(45deg);
+    transition: transform .25s ease;
+    margin-top: -3px;
+  }
+  .tl-item.is-open .tl-toggle .tl-caret { transform: rotate(-135deg); margin-top: 2px; }
+  .tl-details {
+    overflow: hidden;
+    height: 0;
+    transition: height .35s cubic-bezier(.4,0,.2,1);
+  }
+  .tl-details-inner {
+    padding: 18px 0 4px;
+    border-top: 1px dashed var(--line);
+    margin-top: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .tl-stack {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.04em;
+  }
+  .tl-stack b { color: var(--fg-dim); font-weight: 500; margin-right: 6px; }
+  .tl-detail-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--fg-dim);
+    margin: 0;
+    max-width: 62ch;
+    text-wrap: pretty;
+  }
+
+  /* nested key-challenge expand */
+  .tl-challenge-toggle {
+    align-self: flex-start;
+    background: transparent;
+    border: none;
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 6px 0 4px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
+    border-bottom: 1px solid transparent;
+    transition: border-color .15s ease, opacity .15s ease;
+  }
+  .tl-challenge-toggle:hover { border-bottom-color: var(--accent-line); }
+  .tl-challenge-toggle .arrow { transition: transform .25s ease; display: inline-block; }
+  .tl-item.is-challenge-open .tl-challenge-toggle .arrow { transform: rotate(90deg); }
+  .tl-challenge {
+    overflow: hidden;
+    height: 0;
+    transition: height .35s cubic-bezier(.4,0,.2,1);
+  }
+  .tl-challenge-inner {
+    padding: 18px 20px;
+    margin-top: 6px;
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 62ch;
+  }
+  .tl-challenge-block { display: flex; flex-direction: column; gap: 4px; }
+  .tl-challenge-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .tl-challenge-text {
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--fg);
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  /* responsive */
+  @media (max-width: 880px) {
+    .nav-links {
+      display: none;
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      gap: 0;
+      background: rgba(13, 13, 13, 0.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+      padding: 8px 0;
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a {
+      padding: 14px 32px;
+      border-bottom: 1px solid var(--line);
+      font-size: 14px;
+    }
+    .nav-links a:last-child { border-bottom: none; }
+    .nav-burger { display: inline-flex; }
+    .about-grid, .project, .contact-wrap { grid-template-columns: 1fr; gap: 32px; }
+    .project-visual { border-right: none; border-bottom: 1px solid var(--line); min-height: 280px; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .hero { padding: 80px 0 60px; }
+    section { padding: 72px 0; }
+  }
+  @media (max-width: 520px) {
+    .wrap { padding: 0 20px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .status-row { gap: 20px 32px; }
+    .project-body { padding: 28px 24px; }
+  }
+
+  /* fade-in on load */
+  [data-i18n], [data-i18n-html] { transition: opacity .15s ease; }
+  body.lang-switching [data-i18n], body.lang-switching [data-i18n-html] { opacity: 0.4; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap nav">
+    <a href="#" class="brand">
+      <span class="dot"></span>
+      <span>ismael.martins</span>
+    </a>
+    <div class="nav-right">
+      <a class="nav-icon" href="https://github.com/ismaelvangeance" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.68.8.56 4.56-1.52 7.85-5.83 7.85-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
+      </a>
+      <button class="nav-burger" aria-label="Menu" id="navBurger">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="3" y1="7" x2="21" y2="7"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="17" x2="21" y2="17"/></svg>
+      </button>
+      <nav class="nav-links" id="navLinks">
+        <a href="#about"><span class="num">01</span><span data-i18n="nav.about">About</span></a>
+        <a href="#experience"><span class="num">02</span><span data-i18n="nav.experience">Experience</span></a>
+        <a href="#projects"><span class="num">03</span><span data-i18n="nav.projects">Projects</span></a>
+        <a href="#skills"><span class="num">04</span><span data-i18n="nav.skills">Skills</span></a>
+        <a href="#contact"><span class="num">05</span><span data-i18n="nav.contact">Contact</span></a>
+      </nav>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="pt">PT</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <!-- HERO -->
+  <section class="hero" style="border-bottom: 1px solid var(--line);">
+    <div class="wrap">
+      <div class="hero-grid">
+      <div>
+      <div class="eyebrow"><span data-i18n="hero.eyebrow">Available for new projects</span></div>
+      <h1>
+        <span data-i18n="hero.name">Ismael Cardoso</span><br/>
+        <span data-i18n="hero.surname">Martins</span><span class="accent">.</span>
+      </h1>
+      <div class="role">
+        <span class="tag">Full Stack Developer</span>
+        <span class="sep">/</span>
+        <span>.NET</span>
+        <span class="sep">·</span>
+        <span>Flutter</span>
+        <span class="sep">·</span>
+        <span>Vue</span>
+      </div>
+      </div>
+      <div class="hero-photo">
+        <img id="profile-photo" src="assets/profile.jpeg" alt="Ismael Cardoso Martins" />
+      </div>
+      </div>
+      <div class="hero-actions">
+        <!-- TODO: substituir href pelo arquivo do CV (ex: assets/Ismael-Cardoso-Martins-CV.pdf) -->
+        <a class="btn btn-primary" href="#" download>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="hero.cta_cv">Download CV</span>
+        </a>
+      </div>
+
+      <div class="status-row">
+        <div>
+          <span class="label" data-i18n="status.location">Location</span>
+          <span class="value">Brazil · Remote</span>
+        </div>
+        <div>
+          <span class="label" data-i18n="status.status">Status</span>
+          <span class="value live" data-i18n="status.open">Open to opportunities</span>
+        </div>
+        <div>
+          <span class="label" data-i18n="status.focus">Current focus</span>
+          <span class="value">.NET 10 · Vue 3 · Flutter</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <span class="section-title" data-i18n="about.title">About</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="about-grid">
+        <div class="about-text">
+          <p data-i18n-html="about.p1"><strong>Full Stack Developer</strong> focused on system architecture, corporate applications, and mobile products.</p>
+          <p data-i18n-html="about.p2">I work primarily with <strong>.NET, Vue 3, and Flutter</strong>, designing scalable applications where each layer has well-defined responsibilities.</p>
+          <p data-i18n="about.p3">My approach prioritizes low coupling, predictable communication between services, and code prepared for the product's continuous evolution.</p>
+        </div>
+        <div class="about-meta">
+          <div class="meta-row"><span class="k" data-i18n="meta.role">Role</span><span class="v">Full Stack Developer</span></div>
+          <div class="meta-row"><span class="k" data-i18n="meta.based">Based in</span><span class="v">Brazil</span></div>
+          <div class="meta-row"><span class="k" data-i18n="meta.exp">Experience</span><span class="v" data-i18n="meta.exp_v">Backend · Web · Mobile</span></div>
+          <div class="meta-row"><span class="k" data-i18n="meta.langs">Languages</span><span class="v" data-i18n="meta.langs_v">Portuguese · English</span></div>
+          <div class="meta-row"><span class="k" data-i18n="meta.avail">Availability</span><span class="v" data-i18n="meta.avail_v">Freelance · Full-time</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <span class="section-title" data-i18n="experience.title">Experience</span>
+        <span class="section-rule"></span>
+      </div>
+
+      <ol class="timeline">
+        <li class="tl-item">
+          <div class="tl-period">
+            <span class="tl-year">2025</span>
+            <span class="tl-range" data-i18n="exp.savage_range">Apr 2025 — Dec 2025</span>
+          </div>
+          <div class="tl-body">
+            <div class="tl-head">
+              <h3 class="tl-role" data-i18n="exp.savage_role">Full Stack Developer</h3>
+              <span class="tl-badge">🌎 <span data-i18n="exp.intl">International</span></span>
+            </div>
+            <div class="tl-company">Savage Global Marketing</div>
+            <div class="tl-loc" data-i18n="exp.savage_loc">Florida, USA · Remote</div>
+            <button type="button" class="tl-toggle" aria-expanded="false">
+              <span data-i18n="exp.details">View details</span>
+              <span class="tl-caret" aria-hidden="true"></span>
+            </button>
+            <div class="tl-details" aria-hidden="true">
+              <div class="tl-details-inner">
+                <div class="tl-stack"><b data-i18n="exp.stack_label">Stack</b><span>Flutter · .NET · REST APIs</span></div>
+                <p class="tl-detail-text" data-i18n="exp.savage_detail">Built the mobile version of an internal client management platform — a two-sided system used by the agency's team to manage tasks, productions and client deliveries, and by clients to track their projects in real time.</p>
+                <button type="button" class="tl-challenge-toggle" aria-expanded="false">
+                  <span data-i18n="exp.key_challenge">Key challenge</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </button>
+                <div class="tl-challenge" aria-hidden="true">
+                  <div class="tl-challenge-inner">
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.context">Context</span>
+                      <p class="tl-challenge-text" data-i18n="exp.savage_ctx">I joined the project to build the mobile application using FlutterFlow. The visual layer progressed quickly, but as backend integrations grew and business rules became more complex, state management started introducing significant technical limitations. The project lost scalability and feature evolution became compromised.</p>
+                    </div>
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.decision">Decision</span>
+                      <p class="tl-challenge-text" data-i18n="exp.savage_dec">Rather than pushing forward with a solution that would only increase technical debt, I analyzed the situation, documented the main issues in a technical report, and presented alternatives for moving the project forward. From there, I proposed exporting the FlutterFlow code and migrating to pure Flutter, adopting a modular, feature-based architecture to improve maintainability, organization, and scalability.</p>
+                    </div>
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.result">Result</span>
+                      <p class="tl-challenge-text" data-i18n="exp.savage_res">The migration was completed within a tight deadline, preserving the project's deliveries and allowing the app to evolve sustainably again. The initiative for the change, as well as the definition of the new architecture, came from me.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tl-item">
+          <div class="tl-period">
+            <span class="tl-year">2024</span>
+            <span class="tl-range" data-i18n="exp.ti90_range">Mar 2024 — Apr 2025</span>
+          </div>
+          <div class="tl-body">
+            <div class="tl-head">
+              <h3 class="tl-role" data-i18n="exp.ti90_role">Full Stack Developer</h3>
+            </div>
+            <div class="tl-company">90TI</div>
+            <div class="tl-loc" data-i18n="exp.ti90_loc">Minas Gerais, Brazil</div>
+            <button type="button" class="tl-toggle" aria-expanded="false">
+              <span data-i18n="exp.details">View details</span>
+              <span class="tl-caret" aria-hidden="true"></span>
+            </button>
+            <div class="tl-details" aria-hidden="true">
+              <div class="tl-details-inner">
+                <div class="tl-stack"><b data-i18n="exp.stack_label">Stack</b><span>.NET · Angular · SQL Server</span></div>
+                <p class="tl-detail-text" data-i18n-html="exp.ti90_detail">I initially joined to work on the company's mobile application, alongside the developer responsible for the project. After the app was completed, I was reassigned to the team behind the 90Compor ERP, one of the solutions used by 6,000+ construction companies across Brazil.<br/><br/>Within the ERP, I started in the financial module and later moved through the fiscal and controllership modules, working on the maintenance and evolution of strategic features focused on business management for the construction industry.</p>
+                <button type="button" class="tl-challenge-toggle" aria-expanded="false">
+                  <span data-i18n="exp.key_challenge">Key challenge</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </button>
+                <div class="tl-challenge" aria-hidden="true">
+                  <div class="tl-challenge-inner">
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.context">Context</span>
+                      <p class="tl-challenge-text" data-i18n="exp.ti90_ctx">The company was going through high turnover, both in support and development. During that period, I took over the financial module solo for around 6 sprints, sustaining production and keeping team deliveries on track.</p>
+                    </div>
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.challenge">Challenge</span>
+                      <p class="tl-challenge-text" data-i18n="exp.ti90_dec">I had to implement from scratch a banking integration via the provider's API, covering critical flows like boleto generation, remittance, return, payment confirmation, bank reconciliation, and payment flow — all while still handling support tickets and production demands daily.</p>
+                    </div>
+                    <div class="tl-challenge-block">
+                      <span class="tl-challenge-label" data-i18n="exp.result">Result</span>
+                      <p class="tl-challenge-text" data-i18n="exp.ti90_res">The integration was delivered solo in a highly sensitive domain, where any failure directly impacts real financial operations of large construction industry companies.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="tl-item">
+          <div class="tl-period">
+            <span class="tl-year">2021</span>
+            <span class="tl-range" data-i18n="exp.banpara_range">Nov 2021 — Nov 2023</span>
+          </div>
+          <div class="tl-body">
+            <div class="tl-head">
+              <h3 class="tl-role" data-i18n="exp.banpara_role">Full Stack Intern</h3>
+            </div>
+            <div class="tl-company">Banpará</div>
+            <div class="tl-loc" data-i18n="exp.banpara_loc">Belém, Brazil</div>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <span class="section-title" data-i18n="projects.title">Selected projects</span>
+        <span class="section-rule"></span>
+      </div>
+
+      <div class="projects">
+
+        <!-- G-SEG -->
+        <article class="project">
+          <div class="project-visual">
+            <span class="label">case_01 / geo_intelligence</span>
+            <div class="gseg-visual">
+              <svg class="gseg-map" viewBox="0 0 600 400" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <pattern id="g-grid" width="40" height="40" patternUnits="userSpaceOnUse">
+                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(255,255,255,0.022)" stroke-width="0.5"/>
+                  </pattern>
+                </defs>
+                <rect width="600" height="400" fill="#15171c"/>
+                <rect width="600" height="400" fill="url(#g-grid)"/>
+
+                <!-- curving waterway (dark band) -->
+                <path d="M 220 -10 Q 260 80 230 160 Q 195 230 230 300 Q 250 360 230 410"
+                      stroke="#0c0e12" stroke-width="14" fill="none" stroke-linecap="round"/>
+                <path d="M 220 -10 Q 260 80 230 160 Q 195 230 230 300 Q 250 360 230 410"
+                      stroke="#1a1d23" stroke-width="1.2" fill="none" opacity="0.6"/>
+
+                <!-- main avenues (wider, lighter) -->
+                <g stroke="#3a3d44" stroke-width="3" fill="none" stroke-linecap="round">
+                  <path d="M -10 220 Q 120 215 220 222 Q 290 226 380 218 T 610 224"/>
+                  <path d="M 340 -10 Q 332 100 348 200 Q 358 280 342 410"/>
+                  <path d="M 480 -10 Q 472 120 490 240 Q 500 330 478 410"/>
+                  <path d="M 100 -10 Q 95 120 108 250 Q 115 340 95 410"/>
+                </g>
+                <g stroke="#2c2f35" stroke-width="1.8" fill="none" stroke-linecap="round">
+                  <path d="M -10 90 Q 130 85 240 95 Q 340 100 430 85 T 610 95"/>
+                  <path d="M -10 320 Q 150 312 280 322 Q 390 330 480 315 T 610 325"/>
+                  <path d="M 410 -10 Q 405 100 418 240 Q 425 330 412 410"/>
+                  <path d="M 180 -10 Q 175 110 188 250 Q 195 340 178 410"/>
+                  <path d="M 540 -10 Q 535 100 548 240 Q 555 330 545 410"/>
+                  <path d="M -10 150 Q 130 145 235 155 Q 335 160 425 148 T 610 155"/>
+                  <path d="M -10 270 Q 130 265 235 273 Q 335 278 425 268 T 610 275"/>
+                </g>
+
+                <!-- dense secondary street network -->
+                <g stroke="#23262c" stroke-width="0.8" fill="none" stroke-linecap="round">
+                  <path d="M 0 50 L 600 60"/>
+                  <path d="M 0 70 L 600 78"/>
+                  <path d="M 0 110 L 600 118"/>
+                  <path d="M 0 130 L 600 135"/>
+                  <path d="M 0 170 L 600 178"/>
+                  <path d="M 0 190 L 600 196"/>
+                  <path d="M 0 240 L 600 248"/>
+                  <path d="M 0 260 L 600 266"/>
+                  <path d="M 0 290 L 600 296"/>
+                  <path d="M 0 340 L 600 348"/>
+                  <path d="M 0 360 L 600 368"/>
+                  <path d="M 30 0 L 32 400"/>
+                  <path d="M 60 0 L 62 400"/>
+                  <path d="M 130 0 L 132 400"/>
+                  <path d="M 150 0 L 152 400"/>
+                  <path d="M 210 0 L 212 400"/>
+                  <path d="M 260 0 L 262 400"/>
+                  <path d="M 285 0 L 287 400"/>
+                  <path d="M 305 0 L 307 400"/>
+                  <path d="M 370 0 L 372 400"/>
+                  <path d="M 395 0 L 397 400"/>
+                  <path d="M 440 0 L 442 400"/>
+                  <path d="M 460 0 L 462 400"/>
+                  <path d="M 510 0 L 512 400"/>
+                  <path d="M 570 0 L 572 400"/>
+                  <!-- diagonals -->
+                  <path d="M 60 0 L 280 400"/>
+                  <path d="M 400 0 L 580 320"/>
+                  <path d="M 0 120 L 240 0"/>
+                  <path d="M 300 400 L 540 240"/>
+                </g>
+
+                <!-- street labels (italic, muted) -->
+                <g font-family="-apple-system, system-ui, sans-serif" font-style="italic" fill="#4a4e56" font-size="7.5">
+                  <text x="40" y="86">Av. Gentil Bittencourt</text>
+                  <text x="380" y="86">R. Lauro Sodré</text>
+                  <text x="260" y="218" transform="rotate(-1 260 218)">Av. Casco Velho</text>
+                  <text x="50" y="316">R. dos Mundurucus</text>
+                  <text x="262" y="148" transform="rotate(-78 262 148)" fill="#42454c">Passagem Santa Helena</text>
+                  <text x="480" y="265">Pass. Liberdade</text>
+                  <text x="60" y="360">Passagem Joana D'Arc</text>
+                  <text x="320" y="360">Pass. Brasil</text>
+                </g>
+
+                <!-- selection halo on hot zone -->
+                <circle cx="330" cy="210" r="70" fill="none" stroke="rgba(35,65,220,0.18)" stroke-width="1" stroke-dasharray="3 4"/>
+
+                <!-- incident dot field (populated by script) -->
+                <g class="gseg-dots"></g>
+              </svg>
+
+              <div class="gseg-reticle">
+                <span class="gseg-reticle-cross"></span>
+                <span class="gseg-reticle-ring r2"></span>
+                <span class="gseg-reticle-ring"></span>
+                <span class="gseg-reticle-label">-23.554, -46.638</span>
+              </div>
+
+              <div class="gseg-hud-tr">
+                <div class="gseg-hud-pill"><span data-i18n="gseg.zoom">Zoom 13.4 · GCS WGS84</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="badge">2026</span>
+              <span data-i18n="gseg.kind">Geospatial · Operational Intelligence · B2G</span>
+            </div>
+            <h3>G-SEG Intelligence</h3>
+            <div class="tagline" data-i18n="gseg.tagline">Geospatial platform for criminal analysis and territorial intelligence</div>
+            <p class="desc" data-i18n="gseg.desc">A platform built for geospatial analysis of criminal incidents — centralizing historical data and turning scattered information into territorial patterns and visual insights for analytical support.</p>
+            <ul class="feature-list">
+              <li data-i18n="gseg.f1">Geospatial processing with PostGIS for hotspot detection and clustering</li>
+              <li data-i18n="gseg.f2">Territorial visualization with Mapbox GL, custom heatmaps, and spatial filters</li>
+              <li data-i18n="gseg.f3">Analytical dashboards segmented by context and access profile</li>
+              <li data-i18n="gseg.f4">Containerized multi-tenant architecture with logical data isolation</li>
+            </ul>
+            <div class="stack">
+              <span>Vue 3</span>
+              <span>TypeScript</span>
+              <span>Pinia</span>
+              <span>Mapbox GL JS</span>
+              <span>Vercel</span>
+              <span>.NET 10</span>
+              <span>Docker</span>
+              <span>Render</span>
+              <span>PostgreSQL</span>
+              <span>PostGIS</span>
+              <span>Neon</span>
+              <span>NetTopologySuite</span>
+              <span>OpenStreetMap</span>
+            </div>
+            <div class="project-links">
+              <a href="https://g-seg-front.vercel.app" target="_blank" rel="noopener"><span data-i18n="links.live">Live app ↗</span></a>
+              <a href="gseg.html"><span data-i18n="links.case">Case study →</span></a>
+            </div>
+          </div>
+        </article>
+
+        <!-- TRIUNFO -->
+        <article class="project">
+          <div class="project-visual">
+            <span class="label">case_02 / mobile</span>
+            <div class="tri-visual">
+              <div class="tri-phone">
+                <div class="tri-greet">
+                  <div class="tri-greet-left">
+                    <div class="tri-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+                    <div class="tri-greet-text">
+                      <span class="tri-greet-l1" data-i18n="tri.greet">Boa tarde, 💪</span>
+                      <span class="tri-greet-l2">Arthur Saturno</span>
+                    </div>
+                  </div>
+                  <div class="tri-greet-icons">
+                    <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+                    <span class="ic lime"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span>
+                  </div>
+                </div>
+                <div class="tri-cta">
+                  <div class="tri-cta-tag">
+                    <svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L4.09 12.97a.5.5 0 0 0 .38.83H11l-1 8.2a.5.5 0 0 0 .91.32L20 11.36a.5.5 0 0 0-.38-.83H13l1-8.2a.5.5 0 0 0-.91-.33z"/></svg>
+                    <span data-i18n="tri.cta_tag">INICIAR TREINO DE HOJE</span>
+                  </div>
+                  <div class="tri-cta-title" data-i18n="tri.cta_title">Triceps focado</div>
+                  <div class="tri-cta-bottom">
+                    <div class="tri-cta-meta">
+                      <span class="m1" data-i18n="tri.cta_m1">4 exercícios</span>
+                      <span class="m2" data-i18n="tri.cta_m2">Treino 4 de 4</span>
+                    </div>
+                    <span class="tri-cta-btn"><span data-i18n="tri.cta_btn">Começar</span> →</span>
+                  </div>
+                </div>
+                <div class="tri-week">
+                  <div class="tri-week-note" data-i18n="tri.week_note">→ 0 treinos esta semana. Bora começar?</div>
+                  <div class="tri-week-row">
+                    <div class="tri-week-day active"><span class="lbl" data-i18n="tri.dow_1">seg</span><span class="num">25</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_2">ter</span><span class="num">26</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_3">qua</span><span class="num">27</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_4">qui</span><span class="num">28</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_5">sex</span><span class="num">29</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_6">sáb</span><span class="num">30</span></div>
+                    <div class="tri-week-day"><span class="lbl" data-i18n="tri.dow_7">dom</span><span class="num">31</span></div>
+                  </div>
+                </div>
+                <div class="tri-stitle" data-i18n="tri.period_title">Periodização atual</div>
+                <div class="tri-period">
+                  <div class="tri-period-head">
+                    <div class="tri-period-l">
+                      <span class="t" data-i18n="tri.period_t">Um de cada</span>
+                      <span class="s" data-i18n="tri.period_s">0% concluído</span>
+                    </div>
+                    <span class="tri-period-arrow">›</span>
+                  </div>
+                  <div class="tri-period-dots">
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                    <span></span><span></span><span></span><span></span><span></span><span></span>
+                  </div>
+                </div>
+                <div class="tri-meta">
+                  <div class="tri-meta-row">
+                    <span class="l"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg><span data-i18n="tri.goal_t">Meta semanal</span></span>
+                    <span class="r">0/5</span>
+                  </div>
+                  <div class="tri-meta-bar"><i></i></div>
+                  <div class="tri-meta-note" data-i18n="tri.goal_note">Faltam 5 treinos para atingir a meta.</div>
+                </div>
+                <div class="tri-nav">
+                  <div class="tri-nav-item active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12l9-9 9 9"/><path d="M5 10v10h14V10"/></svg>
+                    <span data-i18n="tri.nav_1">Início</span>
+                  </div>
+                  <div class="tri-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><line x1="8" y1="16" x2="8" y2="12"/><line x1="12" y1="16" x2="12" y2="8"/><line x1="16" y1="16" x2="16" y2="10"/></svg>
+                    <span data-i18n="tri.nav_2">Avaliação</span>
+                  </div>
+                  <div class="tri-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4l-3 3 3 3"/><path d="M18 4l3 3-3 3"/><path d="M9 18l-3 3-3-3"/><path d="M21 18l-3 3-3-3"/><line x1="7" y1="7" x2="17" y2="17"/><line x1="17" y1="7" x2="7" y2="17"/></svg>
+                    <span data-i18n="tri.nav_3">Exercícios</span>
+                  </div>
+                  <div class="tri-nav-item">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><polyline points="14 7 21 7 21 14"/></svg>
+                    <span data-i18n="tri.nav_4">Progresso</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="project-body">
+            <div class="project-meta">
+              <span class="badge" data-i18n="tri.badge_year">2024 – present</span>
+              <span data-i18n="tri.kind">Mobile · Fitness</span>
+            </div>
+            <h3>Triunfo Fitness</h3>
+            <div class="tagline" data-i18n="tri.tagline">Mobile ecosystem for personal trainers and students</div>
+            <p class="desc" data-i18n="tri.desc">Two-sided mobile app: trainers prescribe programs and assess students; students run their workouts with real-time logging of sets, RPE, and progression.</p>
+            <ul class="feature-list">
+              <li data-i18n="tri.f1">Trainer ↔ student relationship with synced plans</li>
+              <li data-i18n="tri.f2">Complete assessments: anamnesis, body composition, anthropometric measurements, progress photos</li>
+              <li data-i18n="tri.f3">PR detection and per-exercise progression charts</li>
+              <li data-i18n="tri.f4">Workout history with load suggestion based on previous sessions</li>
+              <li data-i18n="tri.f5">Before/after comparison with slider</li>
+            </ul>
+            <div class="stack">
+              <span>Flutter</span>
+              <span>Firebase</span>
+              <span>In-App Purchase</span>
+            </div>
+            <div class="project-links">
+              <a href="triunfo.html"><span data-i18n="links.case">Case study →</span></a>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <span class="section-title" data-i18n="skills.title">Stack</span>
+        <span class="section-rule"></span>
+      </div>
+
+      <div class="skills-grid">
+        <div class="skill-cat">
+          <h4 data-i18n="skills.backend">Backend</h4>
+          <ul>
+            <li>.NET 10 <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>C# <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>EF Core <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>REST · gRPC <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Node.js <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+          </ul>
+        </div>
+        <div class="skill-cat">
+          <h4 data-i18n="skills.frontend">Frontend</h4>
+          <ul>
+            <li>Vue 3 <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>TypeScript <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Pinia <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Tailwind <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Mapbox GL <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+          </ul>
+        </div>
+        <div class="skill-cat">
+          <h4 data-i18n="skills.mobile">Mobile</h4>
+          <ul>
+            <li>Flutter <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>Dart <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>Provider · Riverpod <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Firebase <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li><span data-i18n="skills.mobile_native">Platform channels</span> <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+          </ul>
+        </div>
+        <div class="skill-cat">
+          <h4 data-i18n="skills.infra">Data &amp; Infra</h4>
+          <ul>
+            <li>PostgreSQL <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></span></li>
+            <li>PostGIS <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Docker <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+            <li>Redis <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i></i><i></i></span></li>
+            <li>CI/CD <span class="lvl"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" style="border-bottom: none;">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <span class="section-title" data-i18n="contact.title">Contact</span>
+        <span class="section-rule"></span>
+      </div>
+
+      <div class="contact-wrap">
+        <div class="contact-lead">
+          <h2 data-i18n="contact.heading">Got a project that needs a careful build?</h2>
+          <p data-i18n="contact.body">I'm open to freelance and full-time roles in geospatial, mobile, and backend-heavy products. Drop a line — I read everything.</p>
+          <a class="btn btn-primary" href="mailto:ismaelmartins919@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span data-i18n="contact.cta">Send an email</span>
+          </a>
+        </div>
+
+        <div class="contact-list">
+          <!-- email principal -->
+          <a href="mailto:ismaelmartins919@gmail.com">
+            <svg class="ch-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            <span>
+              <span class="ch-label" data-i18n="contact.email">Email</span>
+              <span class="ch-value">ismaelmartins919@gmail.com</span>
+            </span>
+            <span class="ch-arrow">→</span>
+          </a>
+          <a href="https://www.linkedin.com/in/ismaelvangeance/" target="_blank" rel="noopener">
+            <svg class="ch-icon" viewBox="0 0 24 24" fill="currentColor"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.761 0 5-2.239 5-5v-14c0-2.761-2.239-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            <span>
+              <span class="ch-label">LinkedIn</span>
+              <span class="ch-value">/in/ismaelvangeance</span>
+            </span>
+            <span class="ch-arrow">→</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;">
+    <span>© 2026 Ismael Cardoso Martins</span>
+    <span data-i18n="footer.note">Built with HTML, CSS &amp; a bit of JS.</span>
+  </div>
+</footer>
+
+<script>
+  // ---------- i18n ----------
+  const I18N = {
+    en: {
+      'nav.about': 'About',
+      'nav.experience': 'Experience',
+      'nav.projects': 'Projects',
+      'nav.skills': 'Skills',
+      'nav.contact': 'Contact',
+
+      'hero.eyebrow': 'Available for new projects',
+      'hero.name': 'Ismael Cardoso',
+      'hero.surname': 'Martins',
+      'hero.cta_cv': 'Download CV',
+
+      'status.location': 'Location',
+      'status.status': 'Status',
+      'status.open': 'Open to opportunities',
+      'status.focus': 'Current focus',
+
+      'about.title': 'About',
+      'about.p1': '<strong>Full Stack Developer</strong> focused on system architecture, corporate applications, and mobile products.',
+      'about.p2': 'I work primarily with <strong>.NET, Vue 3, and Flutter</strong>, designing scalable applications where each layer has well-defined responsibilities.',
+      'about.p3': "My approach prioritizes low coupling, predictable communication between services, and code prepared for the product's continuous evolution.",
+
+      'meta.role': 'Role',
+      'meta.based': 'Based in',
+      'meta.exp': 'Experience',
+      'meta.exp_v': 'Backend · Web · Mobile',
+      'meta.langs': 'Languages',
+      'meta.langs_v': 'Portuguese · English',
+      'meta.avail': 'Availability',
+      'meta.avail_v': 'Freelance · Full-time',
+
+      'projects.title': 'Selected projects',
+
+      'experience.title': 'Experience',
+      'exp.intl': 'International',
+      'exp.savage_role': 'Full Stack Developer',
+      'exp.savage_range': 'Apr 2025 — Dec 2025',
+      'exp.savage_loc': 'Florida, USA · Remote',
+      'exp.ti90_role': 'Full Stack Developer',
+      'exp.ti90_range': 'Mar 2024 — Apr 2025',
+      'exp.ti90_loc': 'Minas Gerais, Brazil',
+      'exp.banpara_role': 'Full Stack Intern',
+      'exp.banpara_range': 'Nov 2021 — Nov 2023',
+      'exp.banpara_loc': 'Belém, Brazil',
+      'exp.details': 'View details',
+      'exp.stack_label': 'Stack',
+      'exp.savage_detail': "Built the mobile version of an internal client management platform — a two-sided system used by the agency's team to manage tasks, productions and client deliveries, and by clients to track their projects in real time.",
+      'exp.ti90_detail': "I initially joined to work on the company's mobile application, alongside the developer responsible for the project. After the app was completed, I was reassigned to the team behind the 90Compor ERP, one of the solutions used by 6,000+ construction companies across Brazil.<br/><br/>Within the ERP, I started in the financial module and later moved through the fiscal and controllership modules, working on the maintenance and evolution of strategic features focused on business management for the construction industry.",
+      'exp.key_challenge': 'Key challenge',
+      'exp.context': 'Context',
+      'exp.decision': 'Decision',
+      'exp.challenge': 'Challenge',
+      'exp.result': 'Result',
+      'exp.savage_ctx': 'I joined the project to build the mobile application using FlutterFlow. The visual layer progressed quickly, but as backend integrations grew and business rules became more complex, state management started introducing significant technical limitations. The project lost scalability and feature evolution became compromised.',
+      'exp.savage_dec': 'Rather than pushing forward with a solution that would only increase technical debt, I analyzed the situation, documented the main issues in a technical report, and presented alternatives for moving the project forward. From there, I proposed exporting the FlutterFlow code and migrating to pure Flutter, adopting a modular, feature-based architecture to improve maintainability, organization, and scalability.',
+      'exp.savage_res': "The migration was completed within a tight deadline, preserving the project's deliveries and allowing the app to evolve sustainably again. The initiative for the change, as well as the definition of the new architecture, came from me.",
+      'exp.ti90_ctx': 'The company was going through high turnover, both in support and development. During that period, I took over the financial module solo for around 6 sprints, sustaining production and keeping team deliveries on track.',
+      'exp.ti90_dec': "I had to implement from scratch a banking integration via the provider's API, covering critical flows like boleto generation, remittance, return, payment confirmation, bank reconciliation, and payment flow — all while still handling support tickets and production demands daily.",
+      'exp.ti90_res': 'The integration was delivered solo in a highly sensitive domain, where any failure directly impacts real financial operations of large construction industry companies.',
+
+      'gseg.kind': 'Geospatial · Operational Intelligence · B2G',
+      'gseg.tagline': 'Geospatial platform for criminal analysis and territorial intelligence',
+      'gseg.desc': 'A platform built for geospatial analysis of criminal incidents — centralizing historical data and turning scattered information into territorial patterns and visual insights for analytical support.',
+      'gseg.f1': 'Geospatial processing with PostGIS for hotspot detection and clustering',
+      'gseg.f2': 'Territorial visualization with Mapbox GL, custom heatmaps, and spatial filters',
+      'gseg.f3': 'Analytical dashboards segmented by context and access profile',
+      'gseg.f4': 'Containerized multi-tenant architecture with logical data isolation',
+      'gseg.readout_1': 'Incidents (24h)',
+      'gseg.readout_2': 'Active hotspots',
+      'gseg.readout_3': 'Operational cluster',
+      'gseg.zoom': 'Zoom 13.4 · GCS WGS84',
+
+      'tri.kind': 'Mobile · Fitness',
+      'tri.badge_year': '2024 – present',
+      'tri.tagline': 'Mobile ecosystem for personal trainers and students',
+      'tri.desc': 'Two-sided mobile app: trainers prescribe programs and assess students; students run their workouts with real-time logging of sets, RPE, and progression.',
+      'tri.f1': 'Trainer ↔ student relationship with synced plans',
+      'tri.f2': 'Complete assessments: anamnesis, body composition, anthropometric measurements, progress photos',
+      'tri.f3': 'PR detection and per-exercise progression charts',
+      'tri.f4': 'Workout history with load suggestion based on previous sessions',
+      'tri.f5': 'Before/after comparison with slider',
+      'tri.greet': 'Good afternoon, 💪',
+      'tri.cta_tag': "START TODAY'S WORKOUT",
+      'tri.cta_title': 'Focused triceps',
+      'tri.cta_m1': '4 exercises',
+      'tri.cta_m2': 'Workout 4 of 4',
+      'tri.cta_btn': 'Start',
+      'tri.week_note': "→ 0 workouts this week. Let's go?",
+      'tri.dow_1': 'mon',
+      'tri.dow_2': 'tue',
+      'tri.dow_3': 'wed',
+      'tri.dow_4': 'thu',
+      'tri.dow_5': 'fri',
+      'tri.dow_6': 'sat',
+      'tri.dow_7': 'sun',
+      'tri.period_title': 'Current periodization',
+      'tri.period_t': 'One of each',
+      'tri.period_s': '0% completed',
+      'tri.goal_t': 'Weekly goal',
+      'tri.goal_note': '5 workouts to go to hit your goal.',
+      'tri.nav_1': 'Home',
+      'tri.nav_2': 'Assessment',
+      'tri.nav_3': 'Exercises',
+      'tri.nav_4': 'Progress',
+
+      'links.case': 'Case study →',
+      'links.live': 'Live app ↗',
+      'meta.description': 'Full Stack Developer specializing in geospatial systems, mobile ecosystems and clean backend architecture. .NET · Vue 3 · Flutter',
+
+      'skills.title': 'Stack',
+      'skills.backend': 'Backend',
+      'skills.frontend': 'Frontend',
+      'skills.mobile': 'Mobile',
+      'skills.infra': 'Data & Infra',
+      'skills.mobile_native': 'Platform channels',
+
+      'contact.title': 'Contact',
+      'contact.heading': 'Got a project that needs a careful build?',
+      'contact.body': 'I\'m open to freelance and full-time roles in geospatial, mobile, and backend-heavy products. Drop a line — I read everything.',
+      'contact.cta': 'Send an email',
+      'contact.email': 'Email',
+
+      'footer.note': 'Built with HTML, CSS & a bit of JS.',
+    },
+    pt: {
+      'nav.about': 'Sobre',
+      'nav.experience': 'Experiência',
+      'nav.projects': 'Projetos',
+      'nav.skills': 'Stack',
+      'nav.contact': 'Contato',
+
+      'hero.eyebrow': 'Disponível para novos projetos',
+      'hero.name': 'Ismael Cardoso',
+      'hero.surname': 'Martins',
+      'hero.cta_cv': 'Baixar CV',
+
+      'status.location': 'Localização',
+      'status.status': 'Status',
+      'status.open': 'Aberto a oportunidades',
+      'status.focus': 'Foco atual',
+
+      'about.title': 'Sobre',
+      'about.p1': '<strong>Desenvolvedor Full Stack</strong> focado em arquitetura de sistemas, aplicações corporativas e produtos mobile.',
+      'about.p2': 'Trabalho principalmente com <strong>.NET, Vue 3 e Flutter</strong>, projetando aplicações escaláveis onde cada camada possui responsabilidades bem definidas.',
+      'about.p3': 'Minha abordagem prioriza baixo acoplamento, comunicação previsível entre serviços e código preparado para evolução contínua do produto.',
+
+      'meta.role': 'Função',
+      'meta.based': 'Localização',
+      'meta.exp': 'Experiência',
+      'meta.exp_v': 'Backend · Web · Mobile',
+      'meta.langs': 'Idiomas',
+      'meta.langs_v': 'Português · Inglês',
+      'meta.avail': 'Disponibilidade',
+      'meta.avail_v': 'Freelance · CLT',
+
+      'projects.title': 'Projetos selecionados',
+
+      'experience.title': 'Experiência',
+      'exp.intl': 'Internacional',
+      'exp.savage_role': 'Desenvolvedor Full Stack',
+      'exp.savage_range': 'Abr 2025 — Dez 2025',
+      'exp.savage_loc': 'Flórida, EUA · Remoto',
+      'exp.ti90_role': 'Desenvolvedor Full Stack',
+      'exp.ti90_range': 'Mar 2024 — Abr 2025',
+      'exp.ti90_loc': 'Minas Gerais, Brasil',
+      'exp.banpara_role': 'Estagiário Full Stack',
+      'exp.banpara_range': 'Nov 2021 — Nov 2023',
+      'exp.banpara_loc': 'Belém, Brasil',
+      'exp.details': 'Ver detalhes',
+      'exp.stack_label': 'Stack',
+      'exp.savage_detail': 'Construí a versão mobile de uma plataforma interna de gestão de clientes — um sistema de duas pontas usado pela equipe da agência para gerenciar tarefas, produções e entregas, e pelos clientes para acompanhar seus projetos em tempo real.',
+      'exp.ti90_detail': 'Entrei inicialmente para atuar no desenvolvimento do aplicativo mobile da empresa, trabalhando ao lado do desenvolvedor responsável pelo projeto. Após a conclusão da aplicação, fui direcionado para a equipe responsável pelo ERP 90Compor, uma das soluções utilizadas por mais de 6.000 empresas do ramo da construção civil no Brasil.<br/><br/>Dentro do ERP, comecei atuando no módulo financeiro e, posteriormente, passei também pelos módulos fiscal e de controladoria, atuando na manutenção e evolução de funcionalidades estratégicas voltadas para a gestão empresarial no setor da construção civil.',
+      'exp.key_challenge': 'Desafio principal',
+      'exp.context': 'Contexto',
+      'exp.decision': 'Decisão',
+      'exp.challenge': 'Desafio',
+      'exp.result': 'Resultado',
+      'exp.savage_ctx': 'Entrei no projeto para construir o aplicativo mobile utilizando FlutterFlow. A parte visual evoluiu rapidamente, mas conforme as integrações com o backend aumentaram e as regras de negócio ficaram mais complexas, o gerenciamento de estado começou a gerar limitações técnicas relevantes. O projeto perdeu escalabilidade e a evolução das funcionalidades passou a ficar comprometida.',
+      'exp.savage_dec': 'Ao invés de insistir em uma solução que aumentaria a dívida técnica, fiz uma análise do cenário, documentei os principais problemas em um relatório técnico e apresentei alternativas para continuidade do projeto. A partir disso, propus a exportação do código do FlutterFlow e a migração para Flutter puro, adotando uma arquitetura modular baseada em features para melhorar manutenção, organização e escalabilidade.',
+      'exp.savage_res': 'A migração foi concluída em um prazo curto, mantendo as entregas do projeto e permitindo que o aplicativo voltasse a evoluir de forma sustentável. A iniciativa da mudança, assim como a definição da nova arquitetura, partiu de mim.',
+      'exp.ti90_ctx': 'A empresa passava por uma alta rotatividade de profissionais, tanto no suporte quanto no desenvolvimento. Durante esse período, assumi sozinho o módulo financeiro por cerca de 6 sprints, mantendo a sustentação em produção e a continuidade das entregas da equipe.',
+      'exp.ti90_dec': 'Precisava implementar do zero uma integração bancária via API do fornecedor, cobrindo fluxos críticos como geração de boletos, remessa, retorno, confirmação de pagamento, conciliação bancária e fluxo de pagamentos. Tudo isso enquanto ainda atendia tickets vindos do suporte e demandas de produção diariamente.',
+      'exp.ti90_res': 'A integração foi entregue de forma individual em um domínio altamente sensível, onde qualquer falha impacta diretamente operações financeiras reais de grandes empresas do setor da construção civil.',
+
+      'gseg.kind': 'Geoespacial · Inteligência Operacional · B2G',
+      'gseg.tagline': 'Plataforma geoespacial para análise criminal e inteligência territorial',
+      'gseg.desc': 'Plataforma voltada para análise geoespacial de ocorrências criminais, centralizando dados históricos e transformando informações dispersas em padrões territoriais e insights visuais para apoio analítico.',
+      'gseg.f1': 'Processamento geoespacial com PostGIS para detecção e clusterização de hotspots',
+      'gseg.f2': 'Visualização territorial com Mapbox GL, heatmaps customizados e filtros espaciais',
+      'gseg.f3': 'Dashboards analíticos segmentados por contexto e perfil de acesso',
+      'gseg.f4': 'Arquitetura multi-tenant containerizada com isolamento lógico de dados',
+      'gseg.readout_1': 'Ocorrências (24h)',
+      'gseg.readout_2': 'Hotspots ativos',
+      'gseg.readout_3': 'Cluster operacional',
+      'gseg.zoom': 'Zoom 13.4 · GCS WGS84',
+
+      'tri.kind': 'Mobile · Fitness',
+      'tri.badge_year': '2024 – presente',
+      'tri.tagline': 'Ecossistema mobile para personal trainers e alunos',
+      'tri.desc': 'App mobile de duas pontas: treinadores prescrevem programas e avaliam alunos, alunos executam treinos com registro de séries, RPE e progressão em tempo real.',
+      'tri.f1': 'Relação treinador ↔ aluno com planos sincronizados',
+      'tri.f2': 'Avaliações completas: anamnese, composição corporal, medidas antropométricas, fotos de progresso',
+      'tri.f3': 'Detecção de PRs e gráficos de evolução por exercício',
+      'tri.f4': 'Histórico de treinos com sugestão de carga baseada em sessões anteriores',
+      'tri.f5': 'Comparativo antes/depois com slider',
+      'tri.greet': 'Boa tarde, 💪',
+      'tri.cta_tag': 'INICIAR TREINO DE HOJE',
+      'tri.cta_title': 'Triceps focado',
+      'tri.cta_m1': '4 exercícios',
+      'tri.cta_m2': 'Treino 4 de 4',
+      'tri.cta_btn': 'Começar',
+      'tri.week_note': '→ 0 treinos esta semana. Bora começar?',
+      'tri.dow_1': 'seg',
+      'tri.dow_2': 'ter',
+      'tri.dow_3': 'qua',
+      'tri.dow_4': 'qui',
+      'tri.dow_5': 'sex',
+      'tri.dow_6': 'sáb',
+      'tri.dow_7': 'dom',
+      'tri.period_title': 'Periodização atual',
+      'tri.period_t': 'Um de cada',
+      'tri.period_s': '0% concluído',
+      'tri.goal_t': 'Meta semanal',
+      'tri.goal_note': 'Faltam 5 treinos para atingir a meta.',
+      'tri.nav_1': 'Início',
+      'tri.nav_2': 'Avaliação',
+      'tri.nav_3': 'Exercícios',
+      'tri.nav_4': 'Progresso',
+
+      'links.case': 'Estudo de caso →',
+      'links.live': 'App ao vivo ↗',
+      'meta.description': 'Desenvolvedor Full Stack especializado em sistemas geoespaciais, mobile e backend limpo. .NET · Vue 3 · Flutter',
+
+      'skills.title': 'Stack',
+      'skills.backend': 'Backend',
+      'skills.frontend': 'Frontend',
+      'skills.mobile': 'Mobile',
+      'skills.infra': 'Dados & Infra',
+      'skills.mobile_native': 'Platform channels',
+
+      'contact.title': 'Contato',
+      'contact.heading': 'Tem um projeto que pede construção cuidadosa?',
+      'contact.body': 'Aberto a freelances e posições full-time em produtos geoespaciais, mobile e com backend pesado. Manda um e-mail — eu leio todos.',
+      'contact.cta': 'Enviar e-mail',
+      'contact.email': 'E-mail',
+
+      'footer.note': 'Feito com HTML, CSS & um pouco de JS.',
+    }
+  };
+
+  function applyLang(lang) {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    const dict = I18N[lang];
+    document.body.classList.add('lang-switching');
+    requestAnimationFrame(() => {
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] != null) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-html]').forEach(el => {
+        const key = el.getAttribute('data-i18n-html');
+        if (dict[key] != null) el.innerHTML = dict[key];
+      });
+      document.querySelectorAll('.lang button').forEach(b => {
+        b.classList.toggle('active', b.dataset.lang === lang);
+      });
+      const meta = document.getElementById('meta-description');
+      if (meta && dict['meta.description']) meta.setAttribute('content', dict['meta.description']);
+      try { localStorage.setItem('lang', lang); } catch(e){}
+      setTimeout(() => document.body.classList.remove('lang-switching'), 50);
+    });
+  }
+
+  document.querySelectorAll('.lang button').forEach(b => {
+    b.addEventListener('click', () => applyLang(b.dataset.lang));
+  });
+
+  // generic inline expand: pairs a toggle button with its target panel
+  function wireExpand(btn, panel, item, openClass) {
+    if (!btn || !panel) return;
+    btn.addEventListener('click', () => {
+      const isOpen = item.classList.toggle(openClass);
+      btn.setAttribute('aria-expanded', String(isOpen));
+      panel.setAttribute('aria-hidden', String(!isOpen));
+      if (isOpen) {
+        panel.style.height = panel.scrollHeight + 'px';
+        const onEnd = (e) => {
+          if (e.propertyName !== 'height') return;
+          if (item.classList.contains(openClass)) panel.style.height = 'auto';
+          panel.removeEventListener('transitionend', onEnd);
+        };
+        panel.addEventListener('transitionend', onEnd);
+      } else {
+        panel.style.height = panel.scrollHeight + 'px';
+        requestAnimationFrame(() => { panel.style.height = '0px'; });
+      }
+    });
+  }
+
+  // timeline expand toggles
+  document.querySelectorAll('.tl-item').forEach(item => {
+    const mainBtn = item.querySelector(':scope > .tl-body > .tl-toggle');
+    const mainPanel = item.querySelector(':scope > .tl-body > .tl-details');
+    wireExpand(mainBtn, mainPanel, item, 'is-open');
+
+    const chBtn = item.querySelector('.tl-challenge-toggle');
+    const chPanel = item.querySelector('.tl-challenge');
+    wireExpand(chBtn, chPanel, item, 'is-challenge-open');
+  });
+
+  // mobile burger menu
+  const burger = document.getElementById('navBurger');
+  const navLinks = document.getElementById('navLinks');
+  if (burger && navLinks) {
+    burger.addEventListener('click', () => navLinks.classList.toggle('open'));
+    navLinks.addEventListener('click', e => {
+      if (e.target.closest('a')) navLinks.classList.remove('open');
+    });
+  }
+
+  // G-SEG: populate incident dot field
+  (function populateGsegDots() {
+    const group = document.querySelector('.gseg-dots');
+    if (!group) return;
+    const ns = 'http://www.w3.org/2000/svg';
+    // deterministic pseudo-random so layout is stable across reloads
+    let seed = 1337;
+    const rand = () => { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    const palette = [
+      { fill: '#E74C3C', weight: 36 }, // red
+      { fill: '#F39C12', weight: 28 }, // orange
+      { fill: '#F1C40F', weight: 14 }, // amber
+      { fill: '#B0D0F0', weight: 9 },  // light blue
+      { fill: '#A78BFA', weight: 5 },  // purple
+      { fill: '#7A2E2E', weight: 8 },  // dark red
+    ];
+    const total = palette.reduce((s,p)=>s+p.weight,0);
+    const pickColor = () => {
+      let r = rand() * total;
+      for (const p of palette) { if ((r -= p.weight) <= 0) return p; }
+      return palette[0];
+    };
+    // hot zones — dots cluster around these
+    const centers = [
+      { x: 330, y: 210, r: 95, n: 48 },
+      { x: 165, y: 110, r: 70, n: 22 },
+      { x: 460, y: 130, r: 75, n: 28 },
+      { x: 470, y: 290, r: 80, n: 26 },
+      { x: 95,  y: 280, r: 60, n: 16 },
+      { x: 260, y: 340, r: 65, n: 18 },
+      { x: 540, y: 70,  r: 55, n: 12 },
+    ];
+    // avoid placing dots on the curving waterway (rough x-band around x=220-245 weaving)
+    const onWater = (x, y) => {
+      const t = y / 400;
+      const wx = 220 + Math.sin(t * Math.PI * 1.7) * 18 + (t > 0.5 ? 8 : 0);
+      return Math.abs(x - wx) < 7;
+    };
+    for (const c of centers) {
+      for (let i = 0; i < c.n; i++) {
+        const ang = rand() * Math.PI * 2;
+        const dist = Math.pow(rand(), 0.55) * c.r;
+        const x = c.x + Math.cos(ang) * dist;
+        const y = c.y + Math.sin(ang) * dist;
+        if (x < 8 || x > 592 || y < 14 || y > 386) continue;
+        if (onWater(x, y)) continue;
+        const col = pickColor();
+        const ring = rand() < 0.13;
+        const r = 2.3 + rand() * 1.2;
+        if (ring) {
+          const halo = document.createElementNS(ns, 'circle');
+          halo.setAttribute('cx', x.toFixed(1));
+          halo.setAttribute('cy', y.toFixed(1));
+          halo.setAttribute('r', (r + 2.6).toFixed(1));
+          halo.setAttribute('fill', 'none');
+          halo.setAttribute('stroke', col.fill);
+          halo.setAttribute('stroke-width', '1');
+          halo.setAttribute('opacity', '0.55');
+          group.appendChild(halo);
+        }
+        const dot = document.createElementNS(ns, 'circle');
+        dot.setAttribute('cx', x.toFixed(1));
+        dot.setAttribute('cy', y.toFixed(1));
+        dot.setAttribute('r', r.toFixed(2));
+        dot.setAttribute('fill', col.fill);
+        dot.setAttribute('opacity', (0.78 + rand() * 0.2).toFixed(2));
+        group.appendChild(dot);
+      }
+    }
+    // sparse outliers
+    for (let i = 0; i < 22; i++) {
+      const x = 20 + rand() * 560;
+      const y = 20 + rand() * 360;
+      if (onWater(x, y)) continue;
+      const col = pickColor();
+      const dot = document.createElementNS(ns, 'circle');
+      dot.setAttribute('cx', x.toFixed(1));
+      dot.setAttribute('cy', y.toFixed(1));
+      dot.setAttribute('r', (2 + rand() * 1.2).toFixed(2));
+      dot.setAttribute('fill', col.fill);
+      dot.setAttribute('opacity', '0.7');
+      group.appendChild(dot);
+    }
+  })();
+
+
+
+  // init
+  let initial = 'en';
+  try {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'en' || saved === 'pt') initial = saved;
+    else if ((navigator.language || '').toLowerCase().startsWith('pt')) initial = 'pt';
+  } catch(e){}
+  applyLang(initial);
+
+  // smooth scroll for anchors
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href');
+      if (id.length > 1) {
+        const t = document.querySelector(id);
+        if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

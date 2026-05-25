@@ -1,0 +1,493 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Triunfo Fitness — Case Study · Ismael Cardoso Martins</title>
+<meta id="meta-description" name="description" content="Case study: Triunfo Fitness — mobile ecosystem for personal trainers and students. Built with Flutter, Firebase and Clean Architecture." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0D0D0D; --bg-1: #131313; --bg-2: #1A1A1A;
+    --line: #1F1F1F; --line-2: #2A2A2A;
+    --fg: #F2F2F2; --fg-dim: #A8A8A8; --fg-mute: #6B6B6B;
+    --accent: #2341DC; --accent-soft: rgba(35,65,220,0.12); --accent-line: rgba(35,65,220,0.35);
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: #fff; }
+  body::before { content: ''; position: fixed; inset: 0;
+    background-image: linear-gradient(to right, rgba(255,255,255,0.012) 1px, transparent 1px), linear-gradient(to bottom, rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size: 64px 64px; pointer-events: none; z-index: 0; }
+  .wrap { max-width: 980px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 1; }
+
+  header { position: sticky; top: 0; z-index: 50; backdrop-filter: blur(12px); background: rgba(13,13,13,0.72); border-bottom: 1px solid var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+  .brand { font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--fg); display: flex; align-items: center; gap: 10px; }
+  .brand .dot { width: 8px; height: 8px; background: var(--accent); border-radius: 50%; box-shadow: 0 0 12px var(--accent); }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back { font-family: var(--mono); font-size: 12px; color: var(--fg-dim); transition: color .15s ease; }
+  .nav-back:hover { color: var(--fg); }
+  .nav-icon { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; border-radius: 6px; color: var(--fg-dim); border: 1px solid var(--line-2); transition: all .15s ease; }
+  .nav-icon:hover { color: var(--fg); border-color: var(--fg-mute); background: var(--bg-1); }
+  .nav-icon svg { width: 14px; height: 14px; }
+  .lang { display: flex; border: 1px solid var(--line-2); border-radius: 6px; overflow: hidden; font-family: var(--mono); font-size: 11px; font-weight: 500; }
+  .lang button { background: transparent; border: none; color: var(--fg-mute); padding: 6px 10px; cursor: pointer; transition: all .15s ease; font: inherit; letter-spacing: 0.04em; }
+  .lang button:hover { color: var(--fg-dim); }
+  .lang button.active { background: var(--accent); color: #fff; }
+
+  .cs-hero { padding: 80px 0 64px; border-bottom: 1px solid var(--line); }
+  .cs-back { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: 12px; color: var(--fg-mute); margin-bottom: 32px; transition: color .15s ease; }
+  .cs-back:hover { color: var(--accent); }
+  .cs-badge { font-family: var(--mono); font-size: 11px; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-line); padding: 4px 10px; border-radius: 4px; display: inline-block; margin-bottom: 24px; letter-spacing: 0.04em; }
+  .cs-hero h1 { font-size: clamp(40px, 6.4vw, 64px); font-weight: 600; letter-spacing: -0.035em; line-height: 1.05; margin: 0 0 16px; }
+  .cs-hero .subtitle { font-size: 20px; color: var(--fg-dim); max-width: 700px; margin: 0 0 40px; text-wrap: pretty; }
+  .cs-meta { display: flex; gap: 32px; flex-wrap: wrap; padding-top: 28px; border-top: 1px solid var(--line); }
+  .cs-meta > div { display: flex; flex-direction: column; gap: 6px; font-family: var(--mono); }
+  .cs-meta .k { font-size: 10px; color: var(--fg-mute); letter-spacing: 0.06em; text-transform: uppercase; }
+  .cs-meta .v { font-size: 13px; color: var(--fg); }
+
+  section.cs { padding: 80px 0; border-bottom: 1px solid var(--line); }
+  .section-head { display: flex; align-items: baseline; gap: 16px; margin-bottom: 40px; }
+  .section-num { font-family: var(--mono); font-size: 12px; color: var(--accent); }
+  .section-title { font-size: 13px; font-weight: 500; color: var(--fg); text-transform: uppercase; letter-spacing: 0.12em; }
+  .section-rule { flex: 1; height: 1px; background: var(--line); }
+
+  .lead { font-size: 17px; line-height: 1.7; color: var(--fg-dim); margin: 0 0 20px; text-wrap: pretty; max-width: 720px; }
+  .lead strong { color: var(--fg); font-weight: 500; }
+
+  .ov-roles { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 12px 0 24px; }
+  .ov-role { background: var(--bg-1); border: 1px solid var(--line); border-radius: 8px; padding: 24px 26px; display: flex; flex-direction: column; gap: 14px; }
+  .ov-role-tag { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+  .ov-role h3 { font-size: 16px; font-weight: 600; color: var(--fg); margin: 0; letter-spacing: -0.015em; }
+  .ov-role ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 9px; }
+  .ov-role li { position: relative; padding-left: 16px; font-size: 14px; line-height: 1.55; color: var(--fg-dim); text-wrap: pretty; }
+  .ov-role li::before { content: ''; position: absolute; left: 0; top: 9px; width: 4px; height: 4px; border-radius: 50%; background: var(--accent); opacity: 0.55; }
+  .ov-sync { font-size: 14px; color: var(--fg-dim); font-style: italic; margin: 4px 0 0; max-width: 720px; padding-left: 12px; border-left: 2px solid var(--accent-line); }
+  .ov-sync strong { color: var(--fg); font-style: normal; font-weight: 500; }
+  @media (max-width: 720px) {
+    .ov-roles { grid-template-columns: 1fr; gap: 12px; }
+  }
+
+  .arch { background: var(--bg-1); border: 1px solid var(--line); border-radius: 8px; padding: 36px 28px; overflow-x: auto; }
+  .arch-flow { display: flex; align-items: stretch; gap: 8px; min-width: 720px; }
+  .arch-node { flex: 1; background: var(--bg); border: 1px solid var(--line-2); border-radius: 6px; padding: 16px 12px; display: flex; flex-direction: column; gap: 6px; min-width: 110px; }
+  .arch-node.accent { border-color: var(--accent-line); background: var(--accent-soft); }
+  .arch-node .step { font-family: var(--mono); font-size: 9px; color: var(--fg-mute); letter-spacing: 0.06em; }
+  .arch-node .name { font-family: var(--mono); font-size: 12px; color: var(--fg); font-weight: 500; line-height: 1.3; }
+  .arch-node .layer { font-size: 10px; color: var(--fg-dim); margin-top: 4px; }
+  .arch-arrow { display: flex; align-items: center; color: var(--fg-mute); font-family: var(--mono); font-size: 16px; flex-shrink: 0; }
+
+  .features { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line); border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .feature { background: var(--bg); padding: 22px 24px; display: flex; gap: 16px; align-items: flex-start; }
+  .feature .ic { width: 32px; height: 32px; flex-shrink: 0; border-radius: 6px; background: var(--accent-soft); border: 1px solid var(--accent-line); color: var(--accent); display: flex; align-items: center; justify-content: center; }
+  .feature .ic svg { width: 16px; height: 16px; }
+  .feature h4 { margin: 0 0 4px; font-size: 14px; font-weight: 600; color: var(--fg); letter-spacing: -0.01em; }
+  .feature p { margin: 0; font-size: 13px; color: var(--fg-dim); line-height: 1.5; }
+
+  .stack-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .stack-table th, .stack-table td { text-align: left; padding: 14px 16px; border-bottom: 1px solid var(--line); }
+  .stack-table thead th { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; border-bottom: 1px solid var(--line-2); }
+  .stack-table tbody td.layer { font-family: var(--mono); font-size: 11px; color: var(--fg-mute); letter-spacing: 0.04em; text-transform: uppercase; width: 130px; }
+  .stack-table tbody td.tech { color: var(--fg); font-weight: 500; width: 240px; }
+  .stack-table tbody td.why { color: var(--fg-dim); }
+  .stack-table tbody tr:last-child td { border-bottom: none; }
+
+  .challenges { display: flex; flex-direction: column; gap: 0; }
+  .challenge { display: grid; grid-template-columns: 60px 1fr; gap: 24px; padding: 28px 0; border-top: 1px solid var(--line); }
+  .challenge:last-child { border-bottom: 1px solid var(--line); }
+  .challenge .num { font-family: var(--mono); font-size: 36px; font-weight: 300; color: var(--accent); line-height: 1; letter-spacing: -0.02em; }
+  .challenge h3 { font-size: 17px; font-weight: 600; margin: 0 0 8px; color: var(--fg); letter-spacing: -0.015em; }
+  .challenge .problem { font-size: 14px; color: var(--fg-dim); margin: 0 0 14px; text-wrap: pretty; }
+  .challenge .solve { font-size: 14px; color: var(--fg); padding: 12px 14px; background: var(--accent-soft); border-left: 2px solid var(--accent); border-radius: 0 4px 4px 0; text-wrap: pretty; }
+  .challenge .solve strong { font-family: var(--mono); font-size: 10px; color: var(--accent); letter-spacing: 0.06em; text-transform: uppercase; display: block; margin-bottom: 4px; font-weight: 500; }
+
+  .cs-footer-nav { padding: 64px 0; display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+  .cs-footer-nav a { display: flex; flex-direction: column; gap: 4px; font-family: var(--mono); font-size: 11px; color: var(--fg-mute); letter-spacing: 0.04em; text-transform: uppercase; transition: color .15s ease; }
+  .cs-footer-nav a:hover { color: var(--accent); }
+  .cs-footer-nav a .big { font-family: var(--sans); font-size: 18px; font-weight: 500; color: var(--fg); text-transform: none; letter-spacing: -0.01em; transition: color .15s ease; }
+  .cs-footer-nav a:hover .big { color: var(--accent); }
+
+  footer { padding: 32px 0; font-family: var(--mono); font-size: 11px; color: var(--fg-mute); border-top: 1px solid var(--line); }
+  footer .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+  @media (max-width: 720px) {
+    .features { grid-template-columns: 1fr; }
+    .cs-meta { gap: 20px; }
+    .stack-table tbody td.layer, .stack-table tbody td.tech { width: auto; }
+    .stack-table th:nth-child(3), .stack-table td.why { display: none; }
+    .challenge { grid-template-columns: 1fr; gap: 8px; }
+    .challenge .num { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="portfolio.html" class="brand">
+      <span class="dot"></span>
+      <span>ismael.martins</span>
+    </a>
+    <div class="nav-right">
+      <a href="portfolio.html" class="nav-back" data-i18n="nav.back">← Portfolio</a>
+      <a class="nav-icon" href="https://github.com/ismaelvangeance" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.68.8.56 4.56-1.52 7.85-5.83 7.85-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
+      </a>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="pt">PT</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="cs-hero">
+    <div class="wrap">
+      <a href="portfolio.html" class="cs-back">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span data-i18n="hero.back">Back to portfolio</span>
+      </a>
+      <span class="cs-badge">case_study / 02</span>
+      <h1>Triunfo Fitness</h1>
+      <p class="subtitle" data-i18n="hero.subtitle">Mobile ecosystem for personal trainers and students</p>
+      <div class="cs-meta">
+        <div><span class="k" data-i18n="meta.year">Year</span><span class="v">2024</span></div>
+        <div><span class="k" data-i18n="meta.stack">Stack</span><span class="v">Flutter · Dart · Firebase · Provider</span></div>
+        <div><span class="k" data-i18n="meta.type">Type</span><span class="v">Mobile · Fitness</span></div>
+        <div><span class="k" data-i18n="meta.role">Role</span><span class="v" data-i18n="meta.role_v">Full Stack Developer</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">01</span><span class="section-title" data-i18n="ov.title">Overview</span><span class="section-rule"></span></div>
+      <p class="lead" data-i18n-html="ov.p1"><strong>The problem.</strong> Personal trainers were prescribing workouts over WhatsApp and spreadsheets — students lost track of plans mid-week, trainers had no visibility into adherence or progression, and personal records vanished into screenshots.</p>
+      <p class="lead" data-i18n-html="ov.p2"><strong>The solution.</strong> Triunfo is a two-sided mobile app that connects personal trainers to their students in real time.</p>
+      <div class="ov-roles">
+        <div class="ov-role">
+          <span class="ov-role-tag" data-i18n="ov.role_trainer_tag">Trainer side</span>
+          <h3 data-i18n="ov.role_trainer_h">What the trainer does</h3>
+          <ul>
+            <li data-i18n="ov.role_trainer_l1">Creates periodizations and workout sheets with exercises, sets, load and rest time</li>
+            <li data-i18n="ov.role_trainer_l2">Assesses students with anamnesis, body composition, anthropometric measurements and progress photos</li>
+            <li data-i18n="ov.role_trainer_l3">Tracks each student's execution and progression in real time</li>
+            <li data-i18n="ov.role_trainer_l4">Receives post-workout feedback with notes and comments</li>
+          </ul>
+        </div>
+        <div class="ov-role">
+          <span class="ov-role-tag" data-i18n="ov.role_student_tag">Student side</span>
+          <h3 data-i18n="ov.role_student_h">What the student does</h3>
+          <ul>
+            <li data-i18n="ov.role_student_l1">Runs prescribed workouts set by set with built-in rest timer</li>
+            <li data-i18n="ov.role_student_l2">Logs load, reps and effort level for each set</li>
+            <li data-i18n="ov.role_student_l3">Sees exercise history with progression charts</li>
+            <li data-i18n="ov.role_student_l4">Gets load suggestions based on previous sessions</li>
+            <li data-i18n="ov.role_student_l5">Detects personal records automatically</li>
+            <li data-i18n="ov.role_student_l6">Compares progress photos with a before/after slider</li>
+          </ul>
+        </div>
+      </div>
+      <p class="ov-sync" data-i18n-html="ov.sync">Data is synced via Firebase — <strong>the trainer can see the student's workout happening while they execute it.</strong></p>
+    </div>
+  </section>
+
+  <section class="cs">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">02</span><span class="section-title" data-i18n="arch.title">Architecture</span><span class="section-rule"></span></div>
+      <p class="lead" data-i18n="arch.lead">Online-first by design. Firestore is the source of truth — the trainer sees the student's session unfolding in real time as it happens.</p>
+      <div class="arch">
+        <div class="arch-flow">
+          <div class="arch-node"><span class="step">01</span><span class="name" data-i18n="arch.n1">Flutter<br/>App</span><span class="layer" data-i18n="arch.l1">UI · Mobile</span></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node"><span class="step">02</span><span class="name">Provider</span><span class="layer" data-i18n="arch.l2">State</span></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node accent"><span class="step">03</span><span class="name">Firestore</span><span class="layer" data-i18n="arch.l3">Real-time DB</span></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node"><span class="step">04</span><span class="name" data-i18n="arch.n4">Cloud<br/>Functions</span><span class="layer" data-i18n="arch.l4">Triggers</span></div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node"><span class="step">05</span><span class="name" data-i18n="arch.n5">Push<br/>Notifications</span><span class="layer">FCM</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">03</span><span class="section-title" data-i18n="feat.title">Key features</span><span class="section-rule"></span></div>
+      <div class="features">
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg></div>
+          <div><h4 data-i18n="f.prescribe_t">Workout prescription</h4><p data-i18n="f.prescribe_d">Trainers build programs by mesocycle — exercises, sets, target loads, RPE windows.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3v18l7-5 7 5V3z"/></svg></div>
+          <div><h4 data-i18n="f.realtime_t">Real-time trainer view</h4><p data-i18n="f.realtime_d">Firestore listeners stream each set as the student logs it — the trainer watches the session unfold without polling or refresh.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15 8.5 22 9.3 17 14 18.2 21 12 17.8 5.8 21 7 14 2 9.3 9 8.5 12 2"/></svg></div>
+          <div><h4 data-i18n="f.pr_t">Automatic PR detection</h4><p data-i18n="f.pr_d">Personal records flagged in real time — by 1RM estimate, by volume, by tonnage.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+          <div><h4 data-i18n="f.rpe_t">Per-set RPE</h4><p data-i18n="f.rpe_d">Quick RPE input after each set — feeds into autoregulation and the trainer's adjustment loop.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 14 12 9 16 13 21 8"/></svg></div>
+          <div><h4 data-i18n="f.prog_t">Suggested progression</h4><p data-i18n="f.prog_d">Next session's targets are computed from RPE and completion — no spreadsheet math.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div><h4 data-i18n="f.checkin_t">Session check-in</h4><p data-i18n="f.checkin_d">Quick mood/energy/sleep input that contextualizes the session for the trainer's review.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+          <div><h4 data-i18n="f.history_t">Per-exercise history</h4><p data-i18n="f.history_d">Every set ever logged for an exercise, charted by load, volume, and PR markers.</p></div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div>
+          <div><h4 data-i18n="f.clean_t">Clean Architecture</h4><p data-i18n="f.clean_d">Domain · data · presentation layers — business rules don't import Flutter or Firebase.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cs">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">04</span><span class="section-title" data-i18n="st.title">Stack</span><span class="section-rule"></span></div>
+      <table class="stack-table">
+        <thead><tr><th data-i18n="st.h_layer">Layer</th><th data-i18n="st.h_tech">Technology</th><th class="why" data-i18n="st.h_why">Why</th></tr></thead>
+        <tbody>
+          <tr><td class="layer" data-i18n="st.l_mobile">Mobile</td><td class="tech">Flutter + Dart</td><td class="why" data-i18n="st.w_mobile">One codebase, native UI on iOS and Android, fast iteration cycle.</td></tr>
+          <tr><td class="layer" data-i18n="st.l_state">State</td><td class="tech">Provider</td><td class="why" data-i18n="st.w_state">Simple, predictable, no overhead — the right tool for the app's complexity.</td></tr>
+          <tr><td class="layer" data-i18n="st.l_back">Backend</td><td class="tech">Firebase + Firestore</td><td class="why" data-i18n="st.w_back">Real-time listeners, auth out of the box, scales without a server team — the source of truth lives here.</td></tr>
+          <tr><td class="layer" data-i18n="st.l_local">Local storage</td><td class="tech">Hive</td><td class="why" data-i18n="st.w_local">Auxiliary cache for in-progress workout drafts — restored on app reopen so a session in progress is never lost.</td></tr>
+          <tr><td class="layer" data-i18n="st.l_arch">Architecture</td><td class="tech">Clean Architecture</td><td class="why" data-i18n="st.w_arch">Business rules isolated from the framework — the domain layer is pure Dart.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="cs">
+    <div class="wrap">
+      <div class="section-head"><span class="section-num">05</span><span class="section-title" data-i18n="ch.title">Challenges</span><span class="section-rule"></span></div>
+      <div class="challenges">
+        <div class="challenge">
+          <div class="num">01</div>
+          <div>
+            <h3 data-i18n="ch.sync_t">Real-time visibility for the trainer</h3>
+            <p class="problem" data-i18n="ch.sync_p">The trainer needed to watch sessions unfold live — each set the student logged should appear immediately, without refresh, without polling, without burning quota on idle screens.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.sync_s">Scoped Firestore snapshot listeners attached only to the active session document. The trainer's screen subscribes when the workout opens, unsubscribes when it closes — every write streams to the UI in real time with no manual sync.</span></div>
+          </div>
+        </div>
+        <div class="challenge">
+          <div class="num">02</div>
+          <div>
+            <h3 data-i18n="ch.conflict_t">Trainer ↔ student data conflicts</h3>
+            <p class="problem" data-i18n="ch.conflict_p">Two roles writing to the same workout: the trainer adjusts the plan, the student logs execution. Without clear ownership, edits would clobber each other.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.conflict_s">Document-level ownership: trainers own the prescription document, students own the execution document, joined by reference. No field is writable by both — conflict-free by structure.</span></div>
+          </div>
+        </div>
+        <div class="challenge">
+          <div class="num">03</div>
+          <div>
+            <h3 data-i18n="ch.pr_t">PR detection with incomplete history</h3>
+            <p class="problem" data-i18n="ch.pr_p">New users have no baseline — naive PR logic flagged every set as a record on day one, then went silent for weeks while it caught up.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.pr_s">Dynamic baseline per exercise: PRs are relative to the available history with a confidence flag. Day-one sets are tracked but not celebrated; real PRs surface once the data is honest.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <div class="cs-footer-nav">
+      <a href="gseg.html">
+        <span data-i18n="cs.prev_label">← Previous case study</span>
+        <span class="big">G-SEG Intelligence</span>
+      </a>
+      <a href="portfolio.html" style="text-align: right; align-items: flex-end;">
+        <span data-i18n="cs.back_label">Back →</span>
+        <span class="big" data-i18n="cs.back_big">Portfolio</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Ismael Cardoso Martins</span>
+    <span data-i18n="footer.note">Triunfo Fitness · Case Study</span>
+  </div>
+</footer>
+
+<script>
+  const I18N = {
+    en: {
+      'nav.back': '← Portfolio',
+      'hero.back': 'Back to portfolio',
+      'hero.subtitle': 'Mobile ecosystem for personal trainers and students',
+      'meta.year': 'Year', 'meta.stack': 'Stack', 'meta.type': 'Type', 'meta.role': 'Role',
+      'meta.role_v': 'Full Stack Developer',
+      'meta.description': 'Case study: Triunfo Fitness — mobile ecosystem for personal trainers and students. Built with Flutter, Firebase and Clean Architecture.',
+      'ov.title': 'Overview',
+      'ov.p1': '<strong>The problem.</strong> Personal trainers were prescribing workouts over WhatsApp and spreadsheets — students lost track of plans mid-week, trainers had no visibility into adherence or progression, and personal records vanished into screenshots.',
+      'ov.p2': '<strong>The solution.</strong> Triunfo is a two-sided mobile app that connects personal trainers to their students in real time.',
+      'ov.sync': "Data is synced via Firebase — <strong>the trainer can see the student's workout happening while they execute it.</strong>",
+      'ov.role_trainer_tag': 'Trainer side',
+      'ov.role_trainer_h': 'What the trainer does',
+      'ov.role_trainer_l1': 'Creates periodizations and workout sheets with exercises, sets, load and rest time',
+      'ov.role_trainer_l2': 'Assesses students with anamnesis, body composition, anthropometric measurements and progress photos',
+      'ov.role_trainer_l3': "Tracks each student's execution and progression in real time",
+      'ov.role_trainer_l4': 'Receives post-workout feedback with notes and comments',
+      'ov.role_student_tag': 'Student side',
+      'ov.role_student_h': 'What the student does',
+      'ov.role_student_l1': 'Runs prescribed workouts set by set with built-in rest timer',
+      'ov.role_student_l2': 'Logs load, reps and effort level for each set',
+      'ov.role_student_l3': 'Sees exercise history with progression charts',
+      'ov.role_student_l4': 'Gets load suggestions based on previous sessions',
+      'ov.role_student_l5': 'Detects personal records automatically',
+      'ov.role_student_l6': 'Compares progress photos with a before/after slider',
+      'arch.title': 'Architecture',
+      'arch.lead': "Online-first by design. Firestore is the source of truth — the trainer sees the student's session unfolding in real time as it happens.",
+      'arch.n1': 'Flutter<br/>App', 'arch.l1': 'UI · Mobile',
+      'arch.l2': 'State',
+      'arch.l3': 'Real-time DB',
+      'arch.n4': 'Cloud<br/>Functions', 'arch.l4': 'Triggers',
+      'arch.n5': 'Push<br/>Notifications',
+      'feat.title': 'Key features',
+      'f.prescribe_t': 'Workout prescription', 'f.prescribe_d': 'Trainers build programs by mesocycle — exercises, sets, target loads, RPE windows.',
+      'f.realtime_t': 'Real-time trainer view', 'f.realtime_d': 'Firestore listeners stream each set as the student logs it — the trainer watches the session unfold without polling or refresh.',
+      'f.pr_t': 'Automatic PR detection', 'f.pr_d': 'Personal records flagged in real time — by 1RM estimate, by volume, by tonnage.',
+      'f.rpe_t': 'Per-set RPE', 'f.rpe_d': 'Quick RPE input after each set — feeds into autoregulation and the trainer\'s adjustment loop.',
+      'f.prog_t': 'Suggested progression', 'f.prog_d': 'Next session\'s targets are computed from RPE and completion — no spreadsheet math.',
+      'f.checkin_t': 'Session check-in', 'f.checkin_d': 'Quick mood/energy/sleep input that contextualizes the session for the trainer\'s review.',
+      'f.history_t': 'Per-exercise history', 'f.history_d': 'Every set ever logged for an exercise, charted by load, volume, and PR markers.',
+      'f.clean_t': 'Clean Architecture', 'f.clean_d': 'Domain · data · presentation layers — business rules don\'t import Flutter or Firebase.',
+      'st.title': 'Stack', 'st.h_layer': 'Layer', 'st.h_tech': 'Technology', 'st.h_why': 'Why',
+      'st.l_mobile': 'Mobile', 'st.w_mobile': 'One codebase, native UI on iOS and Android, fast iteration cycle.',
+      'st.l_state': 'State', 'st.w_state': 'Simple, predictable, no overhead — the right tool for the app\'s complexity.',
+      'st.l_back': 'Backend', 'st.w_back': 'Real-time listeners, auth out of the box, scales without a server team — the source of truth lives here.',
+      'st.l_local': 'Local storage', 'st.w_local': 'Auxiliary cache for in-progress workout drafts — restored on app reopen so a session in progress is never lost.',
+      'st.l_arch': 'Architecture', 'st.w_arch': 'Business rules isolated from the framework — the domain layer is pure Dart.',
+      'ch.title': 'Challenges', 'ch.solve': 'Solution',
+      'ch.sync_t': 'Real-time visibility for the trainer',
+      'ch.sync_p': 'The trainer needed to watch sessions unfold live — each set the student logged should appear immediately, without refresh, without polling, without burning quota on idle screens.',
+      'ch.sync_s': "Scoped Firestore snapshot listeners attached only to the active session document. The trainer's screen subscribes when the workout opens, unsubscribes when it closes — every write streams to the UI in real time with no manual sync.",
+      'ch.conflict_t': 'Trainer ↔ student data conflicts',
+      'ch.conflict_p': 'Two roles writing to the same workout: the trainer adjusts the plan, the student logs execution. Without clear ownership, edits would clobber each other.',
+      'ch.conflict_s': 'Document-level ownership: trainers own the prescription document, students own the execution document, joined by reference. No field is writable by both — conflict-free by structure.',
+      'ch.pr_t': 'PR detection with incomplete history',
+      'ch.pr_p': 'New users have no baseline — naive PR logic flagged every set as a record on day one, then went silent for weeks while it caught up.',
+      'ch.pr_s': 'Dynamic baseline per exercise: PRs are relative to the available history with a confidence flag. Day-one sets are tracked but not celebrated; real PRs surface once the data is honest.',
+      'cs.prev_label': '← Previous case study',
+      'cs.back_label': 'Back →', 'cs.back_big': 'Portfolio',
+      'footer.note': 'Triunfo Fitness · Case Study',
+    },
+    pt: {
+      'nav.back': '← Portfólio',
+      'hero.back': 'Voltar ao portfólio',
+      'hero.subtitle': 'Ecossistema mobile para personal trainers e alunos',
+      'meta.year': 'Ano', 'meta.stack': 'Stack', 'meta.type': 'Tipo', 'meta.role': 'Função',
+      'meta.role_v': 'Desenvolvedor Full Stack',
+      'meta.description': 'Estudo de caso: Triunfo Fitness — ecossistema mobile para personal trainers e alunos. Construído com Flutter, Firebase e Clean Architecture.',
+      'ov.title': 'Visão geral',
+      'ov.p1': '<strong>O problema.</strong> Personal trainers prescreviam treinos por WhatsApp e planilhas — alunos perdiam o plano no meio da semana, trainers não tinham visibilidade de aderência ou evolução, e recordes pessoais sumiam em prints de tela.',
+      'ov.p2': '<strong>A solução.</strong> Triunfo é um app mobile de duas pontas que conecta personal trainers aos seus alunos em tempo real.',
+      'ov.sync': 'Dados sincronizados via Firebase — <strong>o trainer vê o treino do aluno acontecendo enquanto ele executa.</strong>',
+      'ov.role_trainer_tag': 'Do lado do trainer',
+      'ov.role_trainer_h': 'O que o trainer faz',
+      'ov.role_trainer_l1': 'Cria periodizações e fichas de treino com exercícios, séries, carga e tempo de descanso',
+      'ov.role_trainer_l2': 'Avalia alunos com anamnese, composição corporal, medidas antropométricas e fotos de progresso',
+      'ov.role_trainer_l3': 'Acompanha execução e evolução de cada aluno em tempo real',
+      'ov.role_trainer_l4': 'Recebe feedback pós-treino com notas e comentários',
+      'ov.role_student_tag': 'Do lado do aluno',
+      'ov.role_student_h': 'O que o aluno faz',
+      'ov.role_student_l1': 'Executa treinos prescritos série por série com timer de descanso integrado',
+      'ov.role_student_l2': 'Registra carga, repetições e nível de esforço de cada série',
+      'ov.role_student_l3': 'Visualiza histórico de exercícios com gráficos de evolução',
+      'ov.role_student_l4': 'Recebe sugestão de carga baseada nas últimas sessões',
+      'ov.role_student_l5': 'Detecta recordes pessoais automaticamente',
+      'ov.role_student_l6': 'Compara fotos de progresso com slider antes/depois',
+      'arch.title': 'Arquitetura',
+      'arch.lead': 'Online-first por design. O Firestore é a fonte da verdade — o trainer vê a sessão do aluno acontecendo em tempo real conforme ela rola.',
+      'arch.n1': 'App<br/>Flutter', 'arch.l1': 'UI · Mobile',
+      'arch.l2': 'Estado',
+      'arch.l3': 'DB em tempo real',
+      'arch.n4': 'Cloud<br/>Functions', 'arch.l4': 'Triggers',
+      'arch.n5': 'Push<br/>Notifications',
+      'arch.n6': 'Push<br/>Notifications',
+      'feat.title': 'Principais funcionalidades',
+      'f.prescribe_t': 'Prescrição de treino', 'f.prescribe_d': 'Trainers montam programas por mesociclo — exercícios, séries, cargas-alvo, janelas de RPE.',
+      'f.realtime_t': 'Visão do trainer em tempo real', 'f.realtime_d': 'Listeners do Firestore transmitem cada série conforme o aluno registra — o trainer acompanha a sessão acontecendo sem polling nem refresh.',
+      'f.pr_t': 'Detecção automática de PR', 'f.pr_d': 'Personal records sinalizados em tempo real — por 1RM estimado, volume e tonelagem.',
+      'f.rpe_t': 'RPE por série', 'f.rpe_d': 'Input rápido de RPE após cada série — alimenta autorregulação e o loop de ajuste do trainer.',
+      'f.prog_t': 'Progressão sugerida', 'f.prog_d': 'Os alvos da próxima sessão são calculados a partir de RPE e conclusão — sem matemática de planilha.',
+      'f.checkin_t': 'Check-in de sessão', 'f.checkin_d': 'Input rápido de humor/energia/sono que contextualiza a sessão para a revisão do trainer.',
+      'f.history_t': 'Histórico por exercício', 'f.history_d': 'Toda série já registrada de um exercício, em gráfico de carga, volume e marcadores de PR.',
+      'f.clean_t': 'Clean Architecture', 'f.clean_d': 'Camadas domain · data · presentation — regras de negócio não importam Flutter nem Firebase.',
+      'st.title': 'Stack', 'st.h_layer': 'Camada', 'st.h_tech': 'Tecnologia', 'st.h_why': 'Por quê',
+      'st.l_mobile': 'Mobile', 'st.w_mobile': 'Um único código, UI nativa no iOS e Android, ciclo de iteração rápido.',
+      'st.l_state': 'Estado', 'st.w_state': 'Simples, previsível, sem overhead — a ferramenta certa para a complexidade do app.',
+      'st.l_back': 'Backend', 'st.w_back': 'Listeners em tempo real, auth pronto, escala sem time de servidor — a fonte da verdade vive aqui.',
+      'st.l_local': 'Storage local', 'st.w_local': 'Cache auxiliar para drafts de treino em andamento — restaurado ao reabrir o app para não perder uma sessão em progresso.',
+      'st.l_arch': 'Arquitetura', 'st.w_arch': 'Regras de negócio isoladas do framework — a camada de domínio é Dart puro.',
+      'ch.title': 'Desafios', 'ch.solve': 'Solução',
+      'ch.sync_t': 'Visibilidade em tempo real para o trainer',
+      'ch.sync_p': 'O trainer precisava ver as sessões acontecendo ao vivo — cada série que o aluno registrasse deveria aparecer na hora, sem refresh, sem polling, sem queimar quota em telas paradas.',
+      'ch.sync_s': 'Listeners de snapshot do Firestore escopados apenas no documento da sessão ativa. A tela do trainer se inscreve quando o treino abre, desinscreve quando fecha — cada gravacão flui para a UI em tempo real sem sync manual.',
+      'ch.conflict_t': 'Conflito de dados entre trainer e aluno',
+      'ch.conflict_p': 'Dois papéis escrevendo no mesmo treino: o trainer ajusta o plano, o aluno registra execução. Sem ownership claro, edições se sobrescreveriam.',
+      'ch.conflict_s': 'Ownership por documento: trainers donos do documento de prescrição, alunos donos do documento de execução, ligados por referência. Nenhum campo escrito pelos dois — sem conflito por estrutura.',
+      'ch.pr_t': 'Detecção de PR com histórico incompleto',
+      'ch.pr_p': 'Usuários novos não têm baseline — lógica ingênua sinalizava toda série como recorde no dia um, depois ficava em silêncio por semanas até estabilizar.',
+      'ch.pr_s': 'Baseline dinâmico por exercício: PRs são relativos ao histórico disponível com flag de confiança. Séries de dia um são tracked mas não celebradas; PRs reais aparecem quando o dado é honesto.',
+      'cs.prev_label': '← Estudo de caso anterior',
+      'cs.back_label': 'Voltar →', 'cs.back_big': 'Portfólio',
+      'footer.note': 'Triunfo Fitness · Estudo de caso',
+    }
+  };
+
+  function applyLang(lang) {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    const dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.arch-node .name[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    const meta = document.getElementById('meta-description');
+    if (meta && dict['meta.description']) meta.setAttribute('content', dict['meta.description']);
+    try { localStorage.setItem('lang', lang); } catch(e){}
+  }
+  document.querySelectorAll('.lang button').forEach(b => {
+    b.addEventListener('click', () => applyLang(b.dataset.lang));
+  });
+  let initial = 'en';
+  try {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'en' || saved === 'pt') initial = saved;
+    else if ((navigator.language || '').toLowerCase().startsWith('pt')) initial = 'pt';
+  } catch(e){}
+  applyLang(initial);
+</script>
+</body>
+</html>

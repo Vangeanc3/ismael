@@ -1,0 +1,959 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>G-SEG Intelligence — Case Study · Ismael Cardoso Martins</title>
+<meta id="meta-description" name="description" content="Case study: G-SEG Intelligence — a georeferenced crime analysis platform for public security. Built with .NET 10, Vue 3, PostGIS and Mapbox." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0D0D0D;
+    --bg-1: #131313;
+    --bg-2: #1A1A1A;
+    --line: #1F1F1F;
+    --line-2: #2A2A2A;
+    --fg: #F2F2F2;
+    --fg-dim: #A8A8A8;
+    --fg-mute: #6B6B6B;
+    --accent: #2341DC;
+    --accent-soft: rgba(35, 65, 220, 0.12);
+    --accent-line: rgba(35, 65, 220, 0.35);
+    --sans: 'Inter', system-ui, -apple-system, sans-serif;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, monospace;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; text-decoration: none; }
+  ::selection { background: var(--accent); color: #fff; }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(to right, rgba(255,255,255,0.012) 1px, transparent 1px),
+      linear-gradient(to bottom, rgba(255,255,255,0.012) 1px, transparent 1px);
+    background-size: 64px 64px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 0 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* header (matches index.html) */
+  header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    background: rgba(13, 13, 13, 0.72);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+  .brand {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .brand .dot {
+    width: 8px; height: 8px; background: var(--accent); border-radius: 50%;
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .nav-right { display: flex; align-items: center; gap: 20px; }
+  .nav-back {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-dim);
+    transition: color .15s ease;
+  }
+  .nav-back:hover { color: var(--fg); }
+  .nav-icon {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 6px;
+    color: var(--fg-dim); border: 1px solid var(--line-2);
+    transition: all .15s ease;
+  }
+  .nav-icon:hover { color: var(--fg); border-color: var(--fg-mute); background: var(--bg-1); }
+  .nav-icon svg { width: 14px; height: 14px; }
+  .lang {
+    display: flex;
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    overflow: hidden;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .lang button {
+    background: transparent; border: none;
+    color: var(--fg-mute);
+    padding: 6px 10px;
+    cursor: pointer;
+    transition: all .15s ease;
+    font: inherit;
+    letter-spacing: 0.04em;
+  }
+  .lang button:hover { color: var(--fg-dim); }
+  .lang button.active { background: var(--accent); color: #fff; }
+
+  /* hero */
+  .cs-hero {
+    padding: 80px 0 64px;
+    border-bottom: 1px solid var(--line);
+  }
+  .cs-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg-mute);
+    margin-bottom: 32px;
+    transition: color .15s ease;
+  }
+  .cs-back:hover { color: var(--accent); }
+  .cs-hero-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .cs-live {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    padding: 7px 12px;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: background .15s ease, color .15s ease, border-color .15s ease;
+  }
+  .cs-live:hover { color: #fff; background: var(--accent); border-color: var(--accent); }
+  .cs-live svg { width: 12px; height: 12px; }
+  .cs-badge {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent);
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    padding: 4px 10px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+  .cs-hero h1 {
+    font-size: clamp(40px, 6.4vw, 64px);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.05;
+    margin: 0 0 16px;
+  }
+  .cs-hero .subtitle {
+    font-size: 20px;
+    color: var(--fg-dim);
+    max-width: 700px;
+    margin: 0 0 40px;
+    text-wrap: pretty;
+  }
+  .cs-meta {
+    display: flex;
+    gap: 32px;
+    flex-wrap: wrap;
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+  }
+  .cs-meta > div {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-family: var(--mono);
+  }
+  .cs-meta .k {
+    font-size: 10px;
+    color: var(--fg-mute);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .cs-meta .v {
+    font-size: 13px;
+    color: var(--fg);
+  }
+
+  /* sections */
+  section.cs {
+    padding: 80px 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--accent);
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--fg);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+  }
+  .section-rule { flex: 1; height: 1px; background: var(--line); }
+
+  .lead {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--fg-dim);
+    margin: 0 0 20px;
+    text-wrap: pretty;
+    max-width: 720px;
+  }
+  .lead strong { color: var(--fg); font-weight: 500; }
+
+  /* architecture diagram */
+  .arch {
+    background: var(--bg-1);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 36px 28px;
+    overflow-x: auto;
+  }
+  .arch-flow {
+    display: flex;
+    align-items: stretch;
+    gap: 8px;
+    min-width: 720px;
+  }
+  .arch-node {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--line-2);
+    border-radius: 6px;
+    padding: 16px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    min-width: 110px;
+  }
+  .arch-node.accent {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+  }
+  .arch-node .step {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--fg-mute);
+    letter-spacing: 0.06em;
+  }
+  .arch-node .name {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--fg);
+    font-weight: 500;
+    line-height: 1.3;
+  }
+  .arch-node .layer {
+    font-size: 10px;
+    color: var(--fg-dim);
+    margin-top: 4px;
+  }
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    color: var(--fg-mute);
+    font-family: var(--mono);
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+
+  /* features grid */
+  .features {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .feature {
+    background: var(--bg);
+    padding: 22px 24px;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .feature .ic {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    border: 1px solid var(--accent-line);
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .feature .ic svg { width: 16px; height: 16px; }
+  .feature h4 {
+    margin: 0 0 4px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--fg);
+    letter-spacing: -0.01em;
+  }
+  .feature p {
+    margin: 0;
+    font-size: 13px;
+    color: var(--fg-dim);
+    line-height: 1.5;
+  }
+
+  /* stack cards */
+  .stack-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .stack-card {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 22px;
+    background: var(--bg-1);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .stack-card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .stack-card-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stack-card-tag {
+    font-family: var(--mono);
+    font-size: 12px;
+    padding: 5px 10px;
+    border: 1px solid var(--line-2);
+    border-radius: 3px;
+    color: var(--fg);
+    background: var(--bg-2);
+    line-height: 1;
+  }
+
+  /* challenges */
+  .challenges { display: flex; flex-direction: column; gap: 0; }
+  .challenge {
+    display: grid;
+    grid-template-columns: 60px 1fr;
+    gap: 24px;
+    padding: 28px 0;
+    border-top: 1px solid var(--line);
+  }
+  .challenge:last-child { border-bottom: 1px solid var(--line); }
+  .challenge .num {
+    font-family: var(--mono);
+    font-size: 36px;
+    font-weight: 300;
+    color: var(--accent);
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .challenge h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0 0 8px;
+    color: var(--fg);
+    letter-spacing: -0.015em;
+  }
+  .challenge .problem {
+    font-size: 14px;
+    color: var(--fg-dim);
+    margin: 0 0 14px;
+    text-wrap: pretty;
+  }
+  .challenge .solve {
+    font-size: 14px;
+    color: var(--fg);
+    padding: 12px 14px;
+    background: var(--accent-soft);
+    border-left: 2px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+    text-wrap: pretty;
+  }
+  .challenge .solve strong {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 4px;
+    font-weight: 500;
+  }
+
+  /* cs-footer */
+  .cs-footer-nav {
+    padding: 64px 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .cs-footer-nav a {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    transition: color .15s ease;
+  }
+  .cs-footer-nav a:hover { color: var(--accent); }
+  .cs-footer-nav a .big {
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--fg);
+    text-transform: none;
+    letter-spacing: -0.01em;
+    transition: color .15s ease;
+  }
+  .cs-footer-nav a:hover .big { color: var(--accent); }
+  .cs-footer-nav .next { text-align: right; align-items: flex-end; }
+
+  footer {
+    padding: 32px 0;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--fg-mute);
+    border-top: 1px solid var(--line);
+  }
+  footer .wrap {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  /* responsive */
+  @media (max-width: 720px) {
+    .features { grid-template-columns: 1fr; }
+    .cs-meta { gap: 20px; }
+    .stack-cards { grid-template-columns: 1fr; }
+    .challenge { grid-template-columns: 1fr; gap: 8px; }
+    .challenge .num { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav">
+    <a href="portfolio.html" class="brand">
+      <span class="dot"></span>
+      <span>ismael.martins</span>
+    </a>
+    <div class="nav-right">
+      <a href="portfolio.html" class="nav-back" data-i18n="nav.back">← Portfolio</a>
+      <a class="nav-icon" href="https://github.com/ismaelvangeance" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.69 1.24 3.34.95.1-.74.4-1.24.73-1.53-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.18-3.1-.12-.29-.51-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.84 1.18 3.1 0 4.42-2.69 5.39-5.26 5.68.41.36.78 1.06.78 2.13v3.16c0 .31.21.68.8.56 4.56-1.52 7.85-5.83 7.85-10.91C23.5 5.65 18.35.5 12 .5z"/></svg>
+      </a>
+      <div class="lang" role="group" aria-label="Language">
+        <button data-lang="en" class="active">EN</button>
+        <button data-lang="pt">PT</button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <!-- HERO -->
+  <section class="cs-hero">
+    <div class="wrap">
+      <a href="portfolio.html" class="cs-back">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        <span data-i18n="hero.back">Back to portfolio</span>
+      </a>
+      <span class="cs-badge">case_study / 01</span>
+      <h1>G-SEG Intelligence</h1>
+      <p class="subtitle" data-i18n="hero.subtitle">Geospatial platform for criminal analysis and territorial intelligence</p>
+      <div class="cs-hero-actions">
+        <a class="cs-live" href="https://g-seg-front.vercel.app" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          <span data-i18n="hero.live">Live frontend (app)</span>
+        </a>
+      </div>
+      <div class="cs-meta">
+        <div>
+          <span class="k" data-i18n="meta.year">Year</span>
+          <span class="v">2026</span>
+        </div>
+        <div>
+          <span class="k" data-i18n="meta.stack">Stack</span>
+          <span class="v">.NET 10 · Vue 3 · PostGIS · Mapbox</span>
+        </div>
+        <div>
+          <span class="k" data-i18n="meta.type">Type</span>
+          <span class="v">B2G · Geospatial</span>
+        </div>
+        <div>
+          <span class="k" data-i18n="meta.role">Role</span>
+          <span class="v" data-i18n="meta.role_v">Full Stack Developer</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 01 OVERVIEW -->
+  <section class="cs" id="overview">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">01</span>
+        <span class="section-title" data-i18n="ov.title">Overview</span>
+        <span class="section-rule"></span>
+      </div>
+      <p class="lead" data-i18n-html="ov.p1"><strong>The problem:</strong> incident data scattered across spreadsheets, without standardization, without geospatial visualization, and with little analytical capacity. Identifying territorial patterns relied on manual reading and isolated data interpretation.</p>
+      <p class="lead" data-i18n="ov.p2">G-SEG centralizes these incidents, geocodes records against address registries, and turns historical data into territorial visualizations that can actually be used for spatial analysis and hotspot identification.</p>
+      <p class="lead" data-i18n="ov.p3">The platform is designed for different analytical contexts — from users who need to explore incidents individually to consolidated views for quick reading of territorial patterns and event concentration.</p>
+    </div>
+  </section>
+
+  <!-- 02 ARCHITECTURE -->
+  <section class="cs" id="architecture">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">02</span>
+        <span class="section-title" data-i18n="arch.title">Architecture</span>
+        <span class="section-rule"></span>
+      </div>
+      <p class="lead" data-i18n="arch.lead">A linear pipeline, on purpose. Raw data goes in, geocoded incidents come out, and the frontend is a thin layer over PostGIS queries.</p>
+      <div class="arch">
+        <div class="arch-flow">
+          <div class="arch-node">
+            <span class="step">01</span>
+            <span class="name" data-i18n="arch.n1">Excel<br/>Spreadsheet</span>
+            <span class="layer" data-i18n="arch.l1">Source</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="step">02</span>
+            <span class="name" data-i18n="arch.n2">Import<br/>API</span>
+            <span class="layer">.NET 10</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node accent">
+            <span class="step">03</span>
+            <span class="name">PostgreSQL<br/>+ PostGIS</span>
+            <span class="layer" data-i18n="arch.l3">Spatial DB</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="step">04</span>
+            <span class="name" data-i18n="arch.n4">.NET<br/>API</span>
+            <span class="layer">REST · GeoJSON</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="step">05</span>
+            <span class="name" data-i18n="arch.n5">Vue 3<br/>Frontend</span>
+            <span class="layer">TypeScript</span>
+          </div>
+          <div class="arch-arrow">→</div>
+          <div class="arch-node">
+            <span class="step">06</span>
+            <span class="name">Mapbox<br/>GL JS</span>
+            <span class="layer" data-i18n="arch.l6">Render</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 FEATURES -->
+  <section class="cs" id="features">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">03</span>
+        <span class="section-title" data-i18n="feat.title">Key features</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="features">
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><polyline points="7 10 12 15 17 10"/><path d="M3 19h18"/></svg></div>
+          <div>
+            <h4 data-i18n="f.import_t">Smart data import</h4>
+            <p data-i18n="f.import_d">An optimized pipeline processes 42,000+ SEGUP incidents in ~19 seconds, with duplicate detection, geographic validation, and automatic precision classification (High / Medium / Low).</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div>
+            <h4 data-i18n="f.map_t">Georeferenced crime map</h4>
+            <p data-i18n="f.map_d">Interactive Mapbox GL JS visualization displaying real incidents across Belém, with neighborhood polygons and street coloring by risk level computed via PostGIS.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg></div>
+          <div>
+            <h4 data-i18n="f.filter_t">Chained filters</h4>
+            <p data-i18n="f.filter_d">Filter by neighborhood, period, crime nature, and geocoding precision — applied as a single PostGIS query on the server.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><rect x="7" y="12" width="3" height="6"/><rect x="12" y="8" width="3" height="10"/><rect x="17" y="4" width="3" height="14"/></svg></div>
+          <div>
+            <h4 data-i18n="f.analytics_t">Per-neighborhood analytics</h4>
+            <p data-i18n="f.analytics_d">Ranking of neighborhoods by incident volume with period filter, sorted by criminality descending.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/></svg></div>
+          <div>
+            <h4 data-i18n="f.export_t">Report export</h4>
+            <p data-i18n="f.export_d">CSV and PDF report generation with filtered data, formatted for analysis and briefings.</p>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></div>
+          <div>
+            <h4 data-i18n="f.admin_t">Admin panel</h4>
+            <p data-i18n="f.admin_d">Dedicated interface for spreadsheet imports, post-import routines (snap-to-road, cleanup of clustered coordinates, precision classification), and log monitoring.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 STACK -->
+  <section class="cs" id="stack">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">04</span>
+        <span class="section-title" data-i18n="st.title">Stack</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="stack-cards">
+        <div class="stack-card">
+          <span class="stack-card-label" data-i18n="st.cat_front">Frontend</span>
+          <div class="stack-card-tags">
+            <span class="stack-card-tag">Vue 3</span>
+            <span class="stack-card-tag">TypeScript</span>
+            <span class="stack-card-tag">Pinia</span>
+            <span class="stack-card-tag">Mapbox GL JS</span>
+            <span class="stack-card-tag">Vercel</span>
+          </div>
+        </div>
+        <div class="stack-card">
+          <span class="stack-card-label" data-i18n="st.cat_back">Backend</span>
+          <div class="stack-card-tags">
+            <span class="stack-card-tag">.NET 10</span>
+            <span class="stack-card-tag">Docker</span>
+            <span class="stack-card-tag">Render</span>
+          </div>
+        </div>
+        <div class="stack-card">
+          <span class="stack-card-label" data-i18n="st.cat_db">Database</span>
+          <div class="stack-card-tags">
+            <span class="stack-card-tag">PostgreSQL</span>
+            <span class="stack-card-tag">PostGIS</span>
+            <span class="stack-card-tag">Neon</span>
+            <span class="stack-card-tag">NetTopologySuite</span>
+          </div>
+        </div>
+        <div class="stack-card">
+          <span class="stack-card-label" data-i18n="st.cat_geo">Data &amp; Geospatial</span>
+          <div class="stack-card-tags">
+            <span class="stack-card-tag">OpenStreetMap</span>
+            <span class="stack-card-tag" data-i18n="st.tag_segup">SEGUP (real crime data)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 CHALLENGES -->
+  <section class="cs" id="challenges">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-num">05</span>
+        <span class="section-title" data-i18n="ch.title">Challenges</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="challenges">
+        <div class="challenge">
+          <div class="num">01</div>
+          <div>
+            <h3 data-i18n="ch.geo_t">Imprecise geocoding of raw data</h3>
+            <p class="problem" data-i18n="ch.geo_p">SEGUP spreadsheets contained generic coordinates — many crimes registered at the precinct or battalion HQ rather than at the actual incident location. Naive geocoding artificially inflated certain streets and neighborhoods.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.geo_s">A precision score per record (HIGH / MEDIUM / LOW) based on the density of repeated coordinates. The map filters by score and analysts know exactly which pins to trust.</span></div>
+          </div>
+        </div>
+        <div class="challenge">
+          <div class="num">02</div>
+          <div>
+            <h3 data-i18n="ch.perf_t">Importing 42,000 records crashed the server</h3>
+            <p class="problem" data-i18n="ch.perf_p">The initial pipeline fired thousands of sequential queries against the database — one per spreadsheet row. With 42k records, imports took minutes and exhausted the connection pool.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.perf_s">Full preload into memory before the loop — neighborhoods, streets, and duplicate keys loaded once via HashSet. Zero queries inside the loop. Result: 42,000 crimes imported in ~19 seconds.</span></div>
+          </div>
+        </div>
+        <div class="challenge">
+          <div class="num">03</div>
+          <div>
+            <h3 data-i18n="ch.bairro_t">Clustered coordinates inflating the street ranking</h3>
+            <p class="problem" data-i18n="ch.bairro_p">Crimes with imprecise locations shared the exact same coordinate, making certain streets appear as the most dangerous in the city due to artificial point accumulation.</p>
+            <div class="solve"><strong data-i18n="ch.solve">Solution</strong><span data-i18n="ch.bairro_s">A cleanup routine by density threshold — coordinates with 5 or more identical crimes are unlinked from the street, keeping the crime in the database but removing it from the ranking. Per-street analysis reflects only trustworthy locations.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER NAV -->
+  <div class="wrap">
+    <div class="cs-footer-nav">
+      <a href="portfolio.html">
+        <span data-i18n="cs.back_label">← Back</span>
+        <span class="big" data-i18n="cs.back_big">Portfolio</span>
+      </a>
+      <a href="triunfo.html" class="next">
+        <span data-i18n="cs.next_label">Next case study →</span>
+        <span class="big">Triunfo Fitness</span>
+      </a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Ismael Cardoso Martins</span>
+    <span data-i18n="footer.note">G-SEG Intelligence · Case Study</span>
+  </div>
+</footer>
+
+<script>
+  const I18N = {
+    en: {
+      'nav.back': '← Portfolio',
+
+      'hero.back': 'Back to portfolio',
+      'hero.live': 'Live frontend (app)',
+      'hero.subtitle': 'Geospatial platform for criminal analysis and territorial intelligence',
+      'meta.year': 'Year',
+      'meta.stack': 'Stack',
+      'meta.type': 'Type',
+      'meta.role': 'Role',
+      'meta.role_v': 'Full Stack Developer',
+      'meta.description': 'Case study: G-SEG Intelligence — a georeferenced crime analysis platform for public security. Built with .NET 10, Vue 3, PostGIS and Mapbox.',
+
+      'ov.title': 'Overview',
+      'ov.p1': '<strong>The problem:</strong> incident data scattered across spreadsheets, without standardization, without geospatial visualization, and with little analytical capacity. Identifying territorial patterns relied on manual reading and isolated data interpretation.',
+      'ov.p2': 'G-SEG centralizes these incidents, geocodes records against address registries, and turns historical data into territorial visualizations that can actually be used for spatial analysis and hotspot identification.',
+      'ov.p3': 'The platform is designed for different analytical contexts — from users who need to explore incidents individually to consolidated views for quick reading of territorial patterns and event concentration.',
+
+      'arch.title': 'Architecture',
+      'arch.lead': 'A linear pipeline, on purpose. Raw data goes in, geocoded incidents come out, and the frontend is a thin layer over PostGIS queries.',
+      'arch.n1': 'Excel<br/>Spreadsheet',
+      'arch.l1': 'Source',
+      'arch.n2': 'Import<br/>API',
+      'arch.l3': 'Spatial DB',
+      'arch.n4': '.NET<br/>API',
+      'arch.n5': 'Vue 3<br/>Frontend',
+      'arch.l6': 'Render',
+
+      'feat.title': 'Key features',
+      'f.import_t': 'Smart data import',
+      'f.import_d': 'An optimized pipeline processes 42,000+ SEGUP incidents in ~19 seconds, with duplicate detection, geographic validation, and automatic precision classification (High / Medium / Low).',
+      'f.map_t': 'Georeferenced crime map',
+      'f.map_d': 'Interactive Mapbox GL JS visualization displaying real incidents across Belém, with neighborhood polygons and street coloring by risk level computed via PostGIS.',
+      'f.filter_t': 'Chained filters',
+      'f.filter_d': 'Filter by neighborhood, period, crime nature, and geocoding precision — applied as a single PostGIS query on the server.',
+      'f.analytics_t': 'Per-neighborhood analytics',
+      'f.analytics_d': 'Ranking of neighborhoods by incident volume with period filter, sorted by criminality descending.',
+      'f.export_t': 'Report export',
+      'f.export_d': 'CSV and PDF report generation with filtered data, formatted for analysis and briefings.',
+      'f.admin_t': 'Admin panel',
+      'f.admin_d': 'Dedicated interface for spreadsheet imports, post-import routines (snap-to-road, cleanup of clustered coordinates, precision classification), and log monitoring.',
+
+      'st.title': 'Stack',
+      'st.cat_front': 'Frontend',
+      'st.cat_back': 'Backend',
+      'st.cat_db': 'Database',
+      'st.cat_geo': 'Data & Geospatial',
+      'st.tag_segup': 'SEGUP (real crime data)',
+
+      'ch.title': 'Challenges',
+      'ch.solve': 'Solution',
+      'ch.geo_t': 'Imprecise geocoding of raw data',
+      'ch.geo_p': 'SEGUP spreadsheets contained generic coordinates — many crimes registered at the precinct or battalion HQ rather than at the actual incident location. Naive geocoding artificially inflated certain streets and neighborhoods.',
+      'ch.geo_s': 'A precision score per record (HIGH / MEDIUM / LOW) based on the density of repeated coordinates. The map filters by score and analysts know exactly which pins to trust.',
+      'ch.perf_t': 'Importing 42,000 records crashed the server',
+      'ch.perf_p': 'The initial pipeline fired thousands of sequential queries against the database — one per spreadsheet row. With 42k records, imports took minutes and exhausted the connection pool.',
+      'ch.perf_s': 'Full preload into memory before the loop — neighborhoods, streets, and duplicate keys loaded once via HashSet. Zero queries inside the loop. Result: 42,000 crimes imported in ~19 seconds.',
+      'ch.bairro_t': 'Clustered coordinates inflating the street ranking',
+      'ch.bairro_p': 'Crimes with imprecise locations shared the exact same coordinate, making certain streets appear as the most dangerous in the city due to artificial point accumulation.',
+      'ch.bairro_s': 'A cleanup routine by density threshold — coordinates with 5 or more identical crimes are unlinked from the street, keeping the crime in the database but removing it from the ranking. Per-street analysis reflects only trustworthy locations.',
+
+      'cs.back_label': '← Back',
+      'cs.back_big': 'Portfolio',
+      'cs.next_label': 'Next case study →',
+
+      'footer.note': 'G-SEG Intelligence · Case Study',
+    },
+    pt: {
+      'nav.back': '← Portfólio',
+
+      'hero.back': 'Voltar ao portfólio',
+      'hero.live': 'Frontend ao vivo (app)',
+      'hero.subtitle': 'Plataforma geoespacial para análise criminal e inteligência territorial',
+      'meta.year': 'Ano',
+      'meta.stack': 'Stack',
+      'meta.type': 'Tipo',
+      'meta.role': 'Função',
+      'meta.role_v': 'Desenvolvedor Full Stack',
+      'meta.description': 'Estudo de caso: G-SEG Intelligence — plataforma de análise criminal georreferenciada para segurança pública. Construída com .NET 10, Vue 3, PostGIS e Mapbox.',
+
+      'ov.title': 'Visão geral',
+      'ov.p1': '<strong>O problema:</strong> dados de ocorrências espalhados em planilhas, sem padronização, sem visualização geoespacial e com pouca capacidade analítica. Identificar padrões territoriais dependia de leitura manual e interpretação isolada dos dados.',
+      'ov.p2': 'O G-SEG centraliza essas ocorrências, geocodifica os registros a partir de bases de endereços e transforma dados históricos em visualizações territoriais utilizáveis para análise espacial e identificação de hotspots.',
+      'ov.p3': 'A plataforma foi projetada para diferentes contextos analíticos: desde usuários que precisam explorar ocorrências individualmente até visualizações consolidadas para leitura rápida de padrões territoriais e concentração de eventos.',
+
+      'arch.title': 'Arquitetura',
+      'arch.lead': 'Pipeline linear, de propósito. Dado bruto entra, ocorrência geocodificada sai, e o frontend é uma camada fina sobre queries PostGIS.',
+      'arch.n1': 'Planilha<br/>Excel',
+      'arch.l1': 'Fonte',
+      'arch.n2': 'API de<br/>Importação',
+      'arch.l3': 'BD Espacial',
+      'arch.n4': 'API<br/>.NET',
+      'arch.n5': 'Frontend<br/>Vue 3',
+      'arch.l6': 'Render',
+
+      'feat.title': 'Principais funcionalidades',
+      'f.import_t': 'Importação inteligente de dados',
+      'f.import_d': 'Pipeline otimizado processa 42.000+ ocorrências da SEGUP em ~19 segundos, com detecção de duplicatas, validação geográfica e classificação automática de precisão de coordenadas (Alta / Média / Baixa).',
+      'f.map_t': 'Mapa de crimes georreferenciado',
+      'f.map_d': 'Visualização interativa com Mapbox GL JS exibindo ocorrências reais sobre o mapa de Belém, com polígonos de bairros e coloração de ruas por nível de risco calculado via PostGIS.',
+      'f.filter_t': 'Filtros encadeados',
+      'f.filter_d': 'Filtre por bairro, período, natureza do crime e precisão de geocodificação — aplicados como uma única query PostGIS no servidor.',
+      'f.analytics_t': 'Analytics por bairro',
+      'f.analytics_d': 'Ranking de bairros por volume de ocorrências com filtro por período, ordenado por criminalidade decrescente.',
+      'f.export_t': 'Exportação de relatórios',
+      'f.export_d': 'Geração de relatórios em CSV e PDF com dados filtrados, formatados para análise e briefings.',
+      'f.admin_t': 'Painel administrativo',
+      'f.admin_d': 'Interface dedicada para importação de planilhas, execução de rotinas pós-import (snap-to-road, limpeza de coordenadas agrupadas, classificação de precisão) e monitoramento de logs.',
+
+      'st.title': 'Stack',
+      'st.cat_front': 'Frontend',
+      'st.cat_back': 'Backend',
+      'st.cat_db': 'Banco de dados',
+      'st.cat_geo': 'Dados & Geoespacial',
+      'st.tag_segup': 'SEGUP (dados reais de criminalidade)',
+
+      'ch.title': 'Desafios',
+      'ch.solve': 'Solução',
+      'ch.geo_t': 'Geocodificação imprecisa dos dados brutos',
+      'ch.geo_p': 'As planilhas da SEGUP continham coordenadas genéricas — muitos crimes registrados na sede da delegacia ou do batalhão, não no local real da ocorrência. Geocodificação ingênua inflava artificialmente certas ruas e bairros.',
+      'ch.geo_s': 'Score de precisão por registro (ALTA / MÉDIA / BAIXA) baseado na densidade de coordenadas repetidas. O mapa filtra por score e analistas sabem exatamente em quais pins confiar.',
+      'ch.perf_t': 'Importação de 42.000 registros travando o servidor',
+      'ch.perf_p': 'O pipeline inicial disparava milhares de queries sequenciais no banco — uma por linha da planilha. Com 42k registros, a importação levava minutos e esgotava conexões.',
+      'ch.perf_s': 'Pré-carga completa em memória antes do loop — bairros, ruas e chaves de duplicatas carregados uma única vez via HashSet. Zero queries dentro do loop. Resultado: 42.000 crimes importados em ~19 segundos.',
+      'ch.bairro_t': 'Coordenadas agrupadas inflando o ranking de ruas',
+      'ch.bairro_p': 'Crimes com localização imprecisa compartilhavam exatamente a mesma coordenada, fazendo certas ruas aparecerem como as mais perigosas da cidade por acúmulo artificial de pontos.',
+      'ch.bairro_s': 'Rotina de limpeza por limiar de densidade — coordenadas com 5 ou mais crimes idênticos são desvinculadas da rua, preservando o crime no banco mas removendo-o do ranking. Análise por rua reflete apenas localizações confiáveis.',
+
+      'cs.back_label': '← Voltar',
+      'cs.back_big': 'Portfólio',
+      'cs.next_label': 'Próximo estudo de caso →',
+
+      'footer.note': 'G-SEG Intelligence · Estudo de caso',
+    }
+  };
+
+  function applyLang(lang) {
+    document.documentElement.lang = lang === 'pt' ? 'pt-BR' : 'en';
+    const dict = I18N[lang];
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    // arch nodes use <br/> in some labels — re-apply via innerHTML
+    document.querySelectorAll('.arch-node .name[data-i18n], .arch-node .layer[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] != null) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang button').forEach(b => {
+      b.classList.toggle('active', b.dataset.lang === lang);
+    });
+    const meta = document.getElementById('meta-description');
+    if (meta && dict['meta.description']) meta.setAttribute('content', dict['meta.description']);
+    try { localStorage.setItem('lang', lang); } catch(e){}
+  }
+
+  document.querySelectorAll('.lang button').forEach(b => {
+    b.addEventListener('click', () => applyLang(b.dataset.lang));
+  });
+
+  let initial = 'en';
+  try {
+    const saved = localStorage.getItem('lang');
+    if (saved === 'en' || saved === 'pt') initial = saved;
+    else if ((navigator.language || '').toLowerCase().startsWith('pt')) initial = 'pt';
+  } catch(e){}
+  applyLang(initial);
+</script>
+
+</body>
+</html>
